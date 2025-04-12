@@ -27,6 +27,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header>
+          <div className="flex justify-between">
+            <p>뒤로가기</p>
+            <p>주문내역</p>
+          </div>
+        </header>
         {children}
       </body>
     </html>
