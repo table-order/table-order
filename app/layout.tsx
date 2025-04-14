@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import MainHeader from "./components/MainHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,10 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header>
-          <div className="flex justify-between">
-            <p>뒤로가기</p>
-            <p>주문내역</p>
-          </div>
+          <MainHeader />
         </header>
         {children}
       </body>
