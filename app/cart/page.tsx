@@ -20,66 +20,78 @@ export default function CartPage() {
   ]);
   const [totalPrice, setTotalPrice] = useState(22500); //TODO: 가격계산
 
+  const updateItemQuantity = (itemId: number, newQuantity: number) => {
+    setCartItem((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+  const deleteItem = (itemId: number) => {
+    setCartItem((prev) => prev.filter((item) => item.id !== itemId));
+  };
+
   return (
     <div id="container" className="px-6 pt-6 pb-4">
       <h1 className="font-bold text-2xl my-8">장바구니</h1>
       <div id="myMenu">
         <p className="font-bold mb-5 text-xl">내 메뉴</p>
         {cartItem.map((item) => (
-          <>
-            <li key={item.id} className="flex items-center mb-5">
-              <div className="flex flex-col w-full">
-                <div className="flex items-center justify-between text-lg font-medium text-gray-800">
-                  <span>{item.name}</span>
-                  <button
-                    type="button"
-                    className="hover:bg-gray-500 transition"
+          <li key={item.id} className="flex items-center mb-5">
+            <div className="flex flex-col w-full">
+              <div className="flex items-center justify-between text-lg font-medium text-gray-800">
+                <span>{item.name}</span>
+                <button type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="white"
+                    onClick={() => {
+                      deleteItem(item.id);
+                    }}
+                    className="size-10 fill-gray-400 hover:fill-gray-500"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="white"
-                      className="size-10 fill-gray-400"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="text-lg font-semibold mb-4 text-gray-800">
-                  {item.price.toLocaleString()}원
-                </div>
-
-                <div className="flex gap-3 justify-end">
-                  <button
-                    type="button"
-                    className="hover:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
-                  >
-                    옵션 변경
-                  </button>
-                  <div
-                    id="count-button-group"
-                    className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
-                  >
-                    <button type="button">-</button>
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
-                      style={{
-                        width: `${String(item.quantity).length + 2 || 1}ch`,
-                      }}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                     />
-                    <button type="button">+</button>
-                  </div>
+                  </svg>
+                </button>
+              </div>
+              <div className="text-lg font-semibold mb-4 text-gray-800">
+                {item.price.toLocaleString()}원
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <button
+                  type="button"
+                  className="hover:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
+                >
+                  옵션 변경
+                </button>
+                <div
+                  id="count-button-group"
+                  className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
+                >
+                  <button type="button">-</button>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => {
+                      updateItemQuantity(item.id, Number(e.target.value));
+                    }}
+                    className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
+                    style={{
+                      width: `${String(item.quantity).length + 2 || 1}ch`,
+                    }}
+                  />
+                  <button type="button">+</button>
                 </div>
               </div>
-            </li>
-          </>
+            </div>
+          </li>
         ))}
       </div>
 
