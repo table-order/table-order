@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 프로젝트명 : Table-order
 
-## Getting Started
+**Git 명령어 정리**
 
-First, run the development server:
+1. 새로운 브랜치 생성
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git checkout -b feature/이름
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. feature 브랜치 작업 완료 후
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git fetch upstream                # upstream의 최신 변경사항 가져오기
+git rebase upstream/develop       # upstream/develop의 변경사항을 현재 브랜치에 rebase
+pnpm i                            # 의존성 패키지 설치 (필요한 경우)
+git push origin feature/이름      # 내 원격레포지토리에 push
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. PR을 GitHub에서 생성하고 팀에 리뷰 요청 보내기
 
-## Learn More
+4. PR 병합 후 develop 브랜치를 최신 상태로 유지
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git checkout develop
+git fetch upstream
+git rebase upstream/develop
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**1 → 2 → 3 순서로 작업을 반복합니다.**
