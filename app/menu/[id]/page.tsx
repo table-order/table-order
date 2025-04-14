@@ -4,7 +4,7 @@ import CustomButton from "@/app/components/CustomButton";
 import Image from "next/image";
 import burgerImg from "../../../public/images/burger.jpg";
 import { useState } from "react";
-import { HiMinus, HiPlus } from "react-icons/hi";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 
 export default function MenuDetailPage() {
   const [amount, setAmount] = useState(1);
@@ -45,7 +45,7 @@ export default function MenuDetailPage() {
                   setAmount(amount - 1);
                 }}
               >
-                <HiMinus className="text-gray-500" />
+                <MinusIcon className="size-4 text-gray-500" />
               </button>
             </div>
             <div className="flex justify-center bg-white font-semibold text-gray-600 text-lg px-6 py-2 my-1 rounded-xl shadow-xs w-12">
@@ -53,7 +53,7 @@ export default function MenuDetailPage() {
             </div>
             <div className="flex items-center p-3 rounded-xl ">
               <button onClick={() => setAmount(amount + 1)}>
-                <HiPlus className="text-gray-500" />
+                <PlusIcon className="size-4 text-gray-500" />
               </button>
             </div>
           </div>
