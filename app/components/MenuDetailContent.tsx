@@ -3,6 +3,7 @@
 import CustomButton from "@/app/components/CustomButton";
 import { useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/solid";
+import { useCartStore } from "../store/store";
 
 type MenuDetailContentProps = {
   menu: {
@@ -18,8 +19,18 @@ type MenuDetailContentProps = {
 export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
   const [amount, setAmount] = useState(1);
   const discountedPrice = null;
+  const { addToCart } = useCartStore();
 
   const menuPrice = `${(amount * menu.price).toLocaleString()}`;
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: menu.id,
+      name: menu.name,
+      price: menu.price,
+      quantity: amount,
+    });
+  };
   return (
     <div>
       <div className="flex flex-col gap-8 p-6 ">
@@ -63,7 +74,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
             </div>
           </div>
         </div>
-        <CustomButton>
+        <CustomButton onClick={handleAddToCart}>
           <div className="flex gap-2 justify-center items-center">
             <p className="px-3 py-1 rounded-[11px] text-blue-500 bg-white text-center">
               {amount}
