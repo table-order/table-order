@@ -30,9 +30,11 @@ function MenuItem({ menu }: MenuProps) {
         <Image
           src={menu.imageUrl}
           alt={menu.name}
-          layout="fill"
+          fill
           className="rounded-lg"
-          objectFit="cover"
+          style={{
+            objectFit: "cover",
+          }}
         />
         <div
           className="absolute top-0 right-0 bottom-0 left-0 z-10"
