@@ -20,6 +20,14 @@ export default function CartPage() {
   ]);
   const [totalPrice, setTotalPrice] = useState(22500); //TODO: 가격계산
 
+  const updateQuantity = (itemId: number, newQuantity: number) => {
+    setCartItem((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
   return (
     <div id="container" className="px-6 pt-6 pb-4">
       <h1 className="font-bold text-2xl my-8">장바구니</h1>
@@ -31,16 +39,13 @@ export default function CartPage() {
               <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between text-lg font-medium text-gray-800">
                   <span>{item.name}</span>
-                  <button
-                    type="button"
-                    className="hover:bg-gray-500 transition"
-                  >
+                  <button type="button">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="white"
-                      className="size-10 fill-gray-400"
+                      className="size-10 fill-gray-400 hover:fill-gray-500"
                     >
                       <path
                         strokeLinecap="round"
@@ -69,6 +74,9 @@ export default function CartPage() {
                     <input
                       type="number"
                       value={item.quantity}
+                      onChange={(e) => {
+                        updateQuantity(item.id, Number(e.target.value));
+                      }}
                       className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
                       style={{
                         width: `${String(item.quantity).length + 2 || 1}ch`,
