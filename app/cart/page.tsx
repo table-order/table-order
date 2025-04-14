@@ -20,12 +20,15 @@ export default function CartPage() {
   ]);
   const [totalPrice, setTotalPrice] = useState(22500); //TODO: 가격계산
 
-  const updateQuantity = (itemId: number, newQuantity: number) => {
+  const updateItemQuantity = (itemId: number, newQuantity: number) => {
     setCartItem((prev) =>
       prev.map((item) =>
         item.id === itemId ? { ...item, quantity: newQuantity } : item
       )
     );
+  };
+  const deleteItem = (itemId: number) => {
+    setCartItem((prev) => prev.filter((item) => item.id !== itemId));
   };
 
   return (
@@ -44,6 +47,9 @@ export default function CartPage() {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="white"
+                    onClick={() => {
+                      deleteItem(item.id);
+                    }}
                     className="size-10 fill-gray-400 hover:fill-gray-500"
                   >
                     <path
@@ -74,7 +80,7 @@ export default function CartPage() {
                     type="number"
                     value={item.quantity}
                     onChange={(e) => {
-                      updateQuantity(item.id, Number(e.target.value));
+                      updateItemQuantity(item.id, Number(e.target.value));
                     }}
                     className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
                     style={{
