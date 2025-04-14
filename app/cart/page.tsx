@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function CartPage() {
-  //임시데이터 cartItem=장바구니, 전역상태 필요
+  //TODO: 임시데이터 cartItem=장바구니, 전역상태 필요
   const [cartItem, setCartItem] = useState([
     {
       id: 1,
@@ -57,7 +57,7 @@ export default function CartPage() {
                 <div className="flex gap-3 justify-end">
                   <button
                     type="button"
-                    className="hover:bg-red-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
+                    className="hover:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
                   >
                     옵션 변경
                   </button>
