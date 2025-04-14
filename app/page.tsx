@@ -1,3 +1,5 @@
+import MenuList from "./components/MenuList";
+
 export default function Home() {
   return (
     <div>
@@ -8,8 +10,7 @@ export default function Home() {
         </div>
         <div>네브바</div>
         <div>공지</div>
-        <div>메뉴 리스트들</div>
-        <div>메뉴 리스트들</div>
+        <MenuList />
       </main>
     </div>
   );
