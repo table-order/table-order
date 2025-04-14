@@ -2,8 +2,13 @@ import MenuDetailContent from "@/app/components/MenuDetailContent";
 import { menuData } from "@/app/components/MenuList";
 import Image from "next/image";
 
-export default function MenuDetailPage({ params }: { params: { id: string } }) {
-  const menuId = parseInt(params.id, 10);
+export default async function MenuDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const menuId = parseInt(id, 10);
   const menu = menuData.find((item) => item.id === menuId);
 
   if (!menu) {
@@ -13,7 +18,14 @@ export default function MenuDetailPage({ params }: { params: { id: string } }) {
   return (
     <div>
       <div className="relative w-full h-80">
-        <Image src={menu.imageUrl} alt="burger" fill objectFit="cover" />
+        <Image
+          src={menu.imageUrl}
+          alt="burger"
+          fill
+          style={{
+            objectFit: "cover",
+          }}
+        />
       </div>
       <MenuDetailContent menu={menu} />
     </div>
