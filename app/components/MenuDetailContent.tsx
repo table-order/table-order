@@ -2,7 +2,6 @@
 
 import CustomButton from "@/app/components/CustomButton";
 import { useState } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/solid";
 import { useCartStore } from "../store/store";
 
 type MenuDetailContentProps = {
@@ -61,7 +60,19 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
                   setAmount(amount - 1);
                 }}
               >
-                <MinusIcon className="size-4 font-semibold text-gray-500" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  className="size-5 stroke-gray-500"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 12h14"
+                  />
+                </svg>
               </button>
             </div>
             <div className="flex justify-center bg-white font-semibold text-gray-600 text-lg px-6 py-2 my-1 rounded-xl shadow-xs w-12">
@@ -69,7 +80,19 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
             </div>
             <div className="flex items-center p-3 rounded-xl ">
               <button onClick={() => setAmount(amount + 1)}>
-                <PlusIcon className="size-4  text-gray-500" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  className="size-5 stroke-gray-500"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
               </button>
             </div>
           </div>
