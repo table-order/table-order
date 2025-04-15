@@ -52,7 +52,26 @@ export default function CartPage() {
                   id="count-button-group"
                   className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
                 >
-                  <button type="button">-</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateQuantity(item.id, item.quantity - 1);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      className="size-5 stroke-gray-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                    </svg>
+                  </button>
                   <input
                     type="number"
                     value={item.quantity}
@@ -64,7 +83,26 @@ export default function CartPage() {
                       width: `${String(item.quantity).length + 2 || 1}ch`,
                     }}
                   />
-                  <button type="button">+</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateQuantity(item.id, item.quantity + 1);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      className="size-5 stroke-gray-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -75,7 +113,10 @@ export default function CartPage() {
       <div id="go-to-menu-group" className="fixed bottom-48 left-0 right-0 ">
         <div className="h-px bg-gray-300"></div>
         <div className="flex justify-center mt-5">
-          <Link href="/" className=" text-blue-500 text-lg font-medium">
+          <Link
+            href="/"
+            className=" text-blue-500 text-lg font-medium hover:bg-gray-300 active:bg-gray-300 rounded-lg py-2 px-4"
+          >
             메뉴 더 추가 +
           </Link>
         </div>
@@ -85,7 +126,7 @@ export default function CartPage() {
         id="order-button-group"
         className="font-medium text-lg fixed bottom-0 left-0 right-0 px-4 pb-4"
       >
-        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2">
+        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2 hover:bg-blue-600 active:hover:bg-blue-600">
           <span className="mr-2 font-semibold text-sm bg-white text-blue-500 px-2 py-0.5 rounded-lg">
             {cartItems.length}
           </span>
