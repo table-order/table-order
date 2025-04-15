@@ -16,7 +16,7 @@ function MenuItem({ menu }: MenuProps) {
   return (
     <Link
       href={`/menu/${menu.id}`}
-      className="flex items-center justify-between gap-6 cursor-pointer"
+      className="flex items-center justify-between gap-4 cursor-pointer"
     >
       <div className="flex flex-col">
         <h2 className="text-lg whitespace-normal break-words font-semibold">
@@ -31,7 +31,7 @@ function MenuItem({ menu }: MenuProps) {
           src={menu.imageUrl}
           alt={menu.name}
           fill
-          className="rounded-lg"
+          className="rounded-xl"
           style={{
             objectFit: "cover",
           }}

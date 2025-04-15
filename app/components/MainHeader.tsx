@@ -10,10 +10,10 @@ export default function MainHeader() {
     <div className="flex justify-between items-center p-1 text-slate-600">
       {pathname !== "/" && (
         <button onClick={() => router.back()}>
-          <ChevronLeftIcon className="size-8" />
+          <ChevronLeftIcon className="size-6" />
         </button>
       )}
-      <p className="ml-auto font-semibold p-1">주문내역</p>
+      <p className="ml-auto text-sm font-semibold p-1">주문내역</p>
     </div>
   );
 }

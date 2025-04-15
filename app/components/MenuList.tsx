@@ -57,6 +57,54 @@ export const menuData = [
     imageUrl: "/images/salsa-burger.jpg",
     category: "단품",
   },
+  {
+    id: 8,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
+  {
+    id: 9,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
+  {
+    id: 10,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
+  {
+    id: 11,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
+  {
+    id: 12,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
+  {
+    id: 13,
+    name: "POST PREMIUM 치즈 버거 세트",
+    price: 14000,
+    description: "세트: 햄버거+음료+케이준프라이",
+    imageUrl: "/images/burger.jpg",
+    category: "세트",
+  },
 ];
 
 export default function MenuList() {
@@ -69,7 +117,7 @@ export default function MenuList() {
   }, {} as Record<string, typeof menuData>);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-[680px]">
       {Object.entries(groupedMenuData).map(([category, menus]) => (
         <div key={category} id={category}>
           <h2 className="text-xl font-bold mb-4 text-slate-700">{category}</h2>
