@@ -1,42 +1,19 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useCartStore } from "../store/store";
 
 export default function CartPage() {
-  //TODO: 임시데이터 cartItem=장바구니, 전역상태 필요
-  const [cartItem, setCartItem] = useState([
-    {
-      id: 1,
-      name: "POST PREMIUM 오리지날 치즈 버거",
-      price: 9500,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: "POST PREMIUM 베이컨 치즈버거",
-      price: 10500,
-      quantity: 1,
-    },
-  ]);
+  const { cartItems, addToCart, removeFromCart, updateQuantity } =
+    useCartStore();
   const [totalPrice, setTotalPrice] = useState(22500); //TODO: 가격계산
-
-  const updateItemQuantity = (itemId: number, newQuantity: number) => {
-    setCartItem((prev) =>
-      prev.map((item) =>
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-  const deleteItem = (itemId: number) => {
-    setCartItem((prev) => prev.filter((item) => item.id !== itemId));
-  };
 
   return (
     <div id="container" className="px-6 pt-6 pb-4">
       <h1 className="font-bold text-2xl my-8">장바구니</h1>
       <div id="myMenu">
         <p className="font-bold mb-5 text-xl">내 메뉴</p>
-        {cartItem.map((item) => (
+        {cartItems.map((item) => (
           <li key={item.id} className="flex items-center mb-5">
             <div className="flex flex-col w-full">
               <div className="flex items-center justify-between text-lg font-medium text-gray-800">
@@ -48,9 +25,9 @@ export default function CartPage() {
                     strokeWidth={1.5}
                     stroke="white"
                     onClick={() => {
-                      deleteItem(item.id);
+                      removeFromCart(item.id);
                     }}
-                    className="size-10 fill-gray-400 hover:fill-gray-500"
+                    className="size-10 fill-gray-400 hover:fill-gray-500 active:fill-gray-500"
                   >
                     <path
                       strokeLinecap="round"
@@ -67,7 +44,7 @@ export default function CartPage() {
               <div className="flex gap-3 justify-end">
                 <button
                   type="button"
-                  className="hover:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
+                  className="hover:bg-gray-300 active:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
                 >
                   옵션 변경
                 </button>
@@ -75,19 +52,57 @@ export default function CartPage() {
                   id="count-button-group"
                   className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
                 >
-                  <button type="button">-</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateQuantity(item.id, item.quantity - 1);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      className="size-5 stroke-gray-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                    </svg>
+                  </button>
                   <input
                     type="number"
                     value={item.quantity}
                     onChange={(e) => {
-                      updateItemQuantity(item.id, Number(e.target.value));
+                      updateQuantity(item.id, Number(e.target.value));
                     }}
                     className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
                     style={{
                       width: `${String(item.quantity).length + 2 || 1}ch`,
                     }}
                   />
-                  <button type="button">+</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateQuantity(item.id, item.quantity + 1);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      className="size-5 stroke-gray-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -98,7 +113,10 @@ export default function CartPage() {
       <div id="go-to-menu-group" className="fixed bottom-48 left-0 right-0 ">
         <div className="h-px bg-gray-300"></div>
         <div className="flex justify-center mt-5">
-          <Link href="/" className=" text-blue-500 text-lg font-medium">
+          <Link
+            href="/"
+            className=" text-blue-500 text-lg font-medium hover:bg-gray-300 active:bg-gray-300 rounded-lg py-2 px-4"
+          >
             메뉴 더 추가 +
           </Link>
         </div>
@@ -108,9 +126,9 @@ export default function CartPage() {
         id="order-button-group"
         className="font-medium text-lg fixed bottom-0 left-0 right-0 px-4 pb-4"
       >
-        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2">
+        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2 hover:bg-blue-600 active:hover:bg-blue-600">
           <span className="mr-2 font-semibold text-sm bg-white text-blue-500 px-2 py-0.5 rounded-lg">
-            {cartItem.length}
+            {cartItems.length}
           </span>
           <span>{totalPrice.toLocaleString()}</span>원 주문하기
         </button>
