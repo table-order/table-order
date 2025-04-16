@@ -33,18 +33,16 @@ export default function NavBar() {
 
   return (
     <div
-      className={`${
-        isFixed ? "fixed top-0 left-0 right-0 z-50 px-6" : "relative"
-      }`}
+      className={`${isFixed ? "fixed top-0 left-0 right-0 z-50" : "relative"}`}
     >
       <div className="bg-white">
-        <div className="flex mb-2 pt-2 justify-around border-b-1 border-b-gray-200 whitespace-nowrap overflow-hidden text-ellipsis">
+        <div className="flex mb-2 pt-2 pl-6 border-b-1 border-b-gray-200 whitespace-nowrap overflow-hidden text-ellipsis">
           {navItems.map((item) => (
             <NavItem key={item.label} label={item.label} href={item.href} />
           ))}
           <button
             className={`absolute ${
-              isFixed ? "right-6" : "right-0"
+              isFixed ? "right-6" : "right-6"
             } top-7 transform -translate-y-1/2 w-6 h-6 rounded-full text-sm font-semibold text-gray-700 opacity-75 bg-gray-200 flex items-center justify-center`}
           >
             <ChevronDownIcon className="size-4" />

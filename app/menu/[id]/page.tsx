@@ -1,6 +1,6 @@
 import MenuDetailContent from "@/app/components/MenuDetailContent";
-import { menuData } from "@/app/components/MenuList";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function MenuDetailPage({
   params,
@@ -8,9 +8,14 @@ export default async function MenuDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const menuId = parseInt(id, 10);
-  const menu = menuData.find((item) => item.id === menuId);
+  const supabase = await createClient();
 
+  const menuId = parseInt(id, 10);
+  const { data: menu } = await supabase
+    .from("MenuItem")
+    .select()
+    .eq("id", menuId)
+    .single();
   if (!menu) {
     return <div>메뉴를 찾을 수 없습니다.</div>;
   }
