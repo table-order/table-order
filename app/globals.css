@@ -1,8 +1,46 @@
 @import "tailwindcss";
+@import url("https://static.toss.im/tps/main.css");
+@import url("https://static.toss.im/tps/others.css");
+
+* {
+  font-family: "Toss Product Sans";
+}
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+@layer utilities {
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  .animate-custom {
+    animation-name: bounce;
+    animation-duration: 2s;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-iteration-count: infinite;
+  }
+}
+
+@theme {
+  --text-22: 22px;
+  --text-17: 17px;
+  --text-15: 15px;
+  --text-13: 13px;
+  --color-tossgray-900: #191f28;
+  --color-tossgray-800: #333d4b;
+  --color-tossgray-700: #4e5968;
+  --color-tossgray-600: #6b7684;
+  --color-tossgray-500: #f2f4f6;
+  --color-tossblue-500: #3182f6;
 }
 
 @theme inline {

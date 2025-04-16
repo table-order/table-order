@@ -36,7 +36,7 @@ export default function NavBar() {
       className={`${isFixed ? "fixed top-0 left-0 right-0 z-50" : "relative"}`}
     >
       <div className="bg-white">
-        <div className="flex mb-2 pt-2 pl-6 border-b-1 border-b-gray-200 whitespace-nowrap overflow-hidden text-ellipsis">
+        <div className="flex mb-4 pt-2 pl-6 border-b-1 border-b-tossgray-500 whitespace-nowrap overflow-hidden text-ellipsis">
           {navItems.map((item) => (
             <NavItem key={item.label} label={item.label} href={item.href} />
           ))}

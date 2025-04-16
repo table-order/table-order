@@ -7,13 +7,26 @@ export default function MainHeader() {
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <div className="flex justify-between items-center p-1 text-slate-600">
+    <div
+      className={`flex items-center p-3 text-slate-600 ${
+        pathname === "/cart" ? "grid grid-cols-3" : "justify-between"
+      }`}
+    >
       {pathname !== "/" && (
         <button onClick={() => router.back()}>
-          <ChevronLeftIcon className="size-6" />
+          <ChevronLeftIcon className="size-8" />
         </button>
       )}
-      <p className="ml-auto text-sm font-semibold p-1">주문내역</p>
+
+      {pathname === "/cart" ? (
+        <p className="text-17 font-semibold p-1 text-center col-start-2">
+          장바구니
+        </p>
+      ) : (
+        <p className="ml-auto text-17 text-tossgray-800 font-semibold p-1">
+          주문내역
+        </p>
+      )}
     </div>
   );
 }

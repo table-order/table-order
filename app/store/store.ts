@@ -13,11 +13,13 @@ type CartState = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
+  getTotalItems: () => number;
+  getTotalPrice: () => number;
 };
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       cartItems: [],
       addToCart: (item) =>
         set((state) => {
@@ -43,6 +45,17 @@ export const useCartStore = create<CartState>()(
             item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
           ),
         })),
+      getTotalItems: () => {
+        const { cartItems } = get();
+        return cartItems.reduce((total, item) => total + item.quantity, 0);
+      },
+      getTotalPrice: () => {
+        const { cartItems } = get();
+        return cartItems.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        );
+      },
     }),
     {
       name: "cart-storage",

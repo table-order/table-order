@@ -19,10 +19,10 @@ function MenuItem({ menu }: MenuProps) {
       className="flex items-center justify-between gap-4 cursor-pointer"
     >
       <div className="flex flex-col">
-        <h2 className="text-lg whitespace-normal break-words font-semibold">
+        <span className="text-17 text-tossgray-800 whitespace-normal break-words font-semibold">
           {menu.name}
-        </h2>
-        <p className="font-semibold text-slate-700">
+        </span>
+        <p className="text-15 text-tossgray-800 font-medium">
           {menu.price.toLocaleString()}원
         </p>
       </div>

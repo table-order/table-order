@@ -39,13 +39,15 @@ export default async function MenuList() {
     <div className="flex flex-col pb-[680px]">
       {sortedMenuData.map(([category, menus]) => (
         <div key={category} id={category}>
-          <h2 className=" font-bold mb-3 px-6 text-slate-700">{category}</h2>
+          <h2 className="font-bold text-17 mb-3 px-6 text-tossgray-800">
+            {category}
+          </h2>
           <div className="flex flex-col gap-4 px-6">
             {menus.map((menu) => (
               <MenuItem key={menu.id} menu={menu} />
             ))}
           </div>
-          <hr className="my-8 h-4 py-2 bg-gray-100 border-0" />
+          <hr className="my-8 h-4 py-2 bg-tossgray-500 border-0" />
         </div>
       ))}
     </div>
