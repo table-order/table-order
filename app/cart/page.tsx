@@ -1,15 +1,24 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCartStore } from "../store/store";
 
 export default function CartPage() {
   const { cartItems, addToCart, removeFromCart, updateQuantity } =
     useCartStore();
-  const [totalPrice, setTotalPrice] = useState(22500); //TODO: 가격계산
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    setTotalPrice(
+      cartItems.reduce(
+        (acc: number, item) => acc + item.quantity * item.price,
+        0
+      )
+    );
+  }, [cartItems]);
 
   return (
-    <div id="container" className="px-6 pt-6 pb-4">
+    <div id="container" className="px-6 pt-6 pb-4 font-sans">
       <h1 className="font-bold text-2xl my-8">장바구니</h1>
       <div id="myMenu">
         <p className="font-bold mb-5 text-xl">내 메뉴</p>
@@ -110,7 +119,7 @@ export default function CartPage() {
         ))}
       </div>
 
-      <div id="go-to-menu-group" className="fixed bottom-48 left-0 right-0 ">
+      <div id="go-to-menu-group" className="">
         <div className="h-px bg-gray-300"></div>
         <div className="flex justify-center mt-5">
           <Link
