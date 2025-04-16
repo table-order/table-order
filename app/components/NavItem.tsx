@@ -50,8 +50,12 @@ export default function NavItem({ label, href }: NavItemProps) {
   return (
     <Link href={href} onClick={handleClick}>
       <div
-        className={`flex-shrink-0 py-2 mr-6 font-semibold text-gray-700 
-       ${isActive ? "border-b-2 border-gray-700" : ""}`}
+        className={`flex-shrink-0 text-17 py-2 mr-6 font-semibold
+       ${
+         isActive
+           ? "border-b-2 border-b-tossgray-800 text-tossgray-800"
+           : "text-tossgray-600"
+       }`}
       >
         {label}
       </div>
