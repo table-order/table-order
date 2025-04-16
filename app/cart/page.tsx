@@ -18,9 +18,8 @@ export default function CartPage() {
   }, [cartItems]);
 
   return (
-    <div id="container" className="px-6 pt-6 pb-4 font-sans">
-      <h1 className="font-bold text-2xl my-8">장바구니</h1>
-      <div id="myMenu">
+    <div id="container" className="font-sans">
+      <div id="myMenu" className="px-6 pt-6 pb-4">
         <p className="font-bold mb-5 text-xl">내 메뉴</p>
         {cartItems.map((item) => (
           <li key={item.id} className="flex items-center mb-5">
@@ -83,14 +82,13 @@ export default function CartPage() {
                   </button>
                   <input
                     type="number"
-                    value={item.quantity}
+                    value={item.quantity ?? 1}
+                    min={1}
+                    max={50}
                     onChange={(e) => {
                       updateQuantity(item.id, Number(e.target.value));
                     }}
-                    className="shadow-sm rounded-lg bg-white text-black justify-center text-center"
-                    style={{
-                      width: `${String(item.quantity).length + 2 || 1}ch`,
-                    }}
+                    className="bg-white font-semibold text-gray-600 justify-center text-center text-lg px-6 py-2 my-1 rounded-xl shadow-xs w-12"
                   />
                   <button
                     type="button"
@@ -119,25 +117,31 @@ export default function CartPage() {
         ))}
       </div>
 
-      <div id="go-to-menu-group" className="">
-        <div className="h-px bg-gray-300"></div>
-        <div className="flex justify-center mt-5">
+      <div
+        id="go-to-menu-group"
+        className="hover:bg-gray-200 active:bg-gray-200"
+      >
+        <div className="h-px bg-gray-200"></div>
+        <div className="flex justify-center my-3">
           <Link
             href="/"
-            className=" text-blue-500 text-lg font-medium hover:bg-gray-300 active:bg-gray-300 rounded-lg py-2 px-4"
+            className=" text-blue-500 text-lg font-medium hover:bg-gray-300 rounded-lg py-2 px-4
+            active:text-sm transition-transform duration-100"
+            style={{ minHeight: "44px" }}
           >
             메뉴 더 추가 +
           </Link>
         </div>
+        <div className="bg-gray-100 h-[16px]"></div>
       </div>
 
       <div
         id="order-button-group"
         className="font-medium text-lg fixed bottom-0 left-0 right-0 px-4 pb-4"
       >
-        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2 hover:bg-blue-600 active:hover:bg-blue-600">
+        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2 hover:bg-blue-600 active:bg-blue-600">
           <span className="mr-2 font-semibold text-sm bg-white text-blue-500 px-2 py-0.5 rounded-lg">
-            {cartItems.length}
+            {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
           </span>
           <span>{totalPrice.toLocaleString()}</span>원 주문하기
         </button>
