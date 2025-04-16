@@ -1,131 +1,51 @@
 import MenuItem from "./MenuItem";
+import { createClient } from "@/utils/supabase/server";
 
-export const menuData = [
-  {
-    id: 1,
-    name: "POST PREMIUM 오리지날 치즈 버거",
-    price: 11500,
-    description: "단품: 햄버거",
-    imageUrl: "/images/burger.jpg",
-    category: "단품",
-  },
-  {
-    id: 2,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 3,
-    name: "케이준프라이",
-    price: 3000,
-    imageUrl: "/images/cajun-fries.jpg",
-    description: "케이준프라이(150g)",
-    category: "사이드",
-  },
-  {
-    id: 4,
-    name: "제로콜라",
-    price: 2000,
-    imageUrl: "/images/zero-cola.jpg",
-    description: "제로콜라(355ml)",
-    category: "음료",
-  },
-  {
-    id: 5,
-    name: "POST PREMIUM 하와이안 버거",
-    price: 11500,
-    description: "단품: 햄버거",
-    imageUrl: "/images/hawai-burger.jpg",
-    category: "단품",
-  },
-  {
-    id: 6,
-    name: "POST PREMIUM 베이컨 치즈 버거",
-    price: 11500,
-    description: "단품: 햄버거",
-    imageUrl: "/images/bacon-burger.jpg",
-    category: "단품",
-  },
-  {
-    id: 7,
-    name: "POST PREMIUM 살사해쉬브라운 버거",
-    price: 11500,
-    description: "단품: 햄버거",
-    imageUrl: "/images/salsa-burger.jpg",
-    category: "단품",
-  },
-  {
-    id: 8,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 9,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 10,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 11,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 12,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-  {
-    id: 13,
-    name: "POST PREMIUM 치즈 버거 세트",
-    price: 14000,
-    description: "세트: 햄버거+음료+케이준프라이",
-    imageUrl: "/images/burger.jpg",
-    category: "세트",
-  },
-];
+interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  imageUrl: string;
+  category: string;
+}
 
-export default function MenuList() {
-  const groupedMenuData = menuData.reduce((acc, menu) => {
-    if (!acc[menu.category]) {
-      acc[menu.category] = [];
-    }
-    acc[menu.category].push(menu);
-    return acc;
-  }, {} as Record<string, typeof menuData>);
+export default async function MenuList() {
+  const supabase = await createClient();
+  const { data: menuItems } = await supabase.from("MenuItem").select();
+
+  const groupedMenuItems = menuItems?.reduce(
+    (acc: Record<string, MenuItem[]>, menu) => {
+      if (!acc[menu.category]) {
+        acc[menu.category] = [];
+      }
+      acc[menu.category].push(menu);
+      return acc;
+    },
+    {} as Record<string, (typeof MenuItem)[]>
+  );
+
+  const categoryOrder = ["단품", "세트", "사이드", "음료"];
+
+  const sortedMenuData = Object.entries(groupedMenuItems) as [
+    string,
+    MenuItem[]
+  ][];
+  sortedMenuData.sort((a, b) => {
+    return categoryOrder.indexOf(a[0]) - categoryOrder.indexOf(b[0]);
+  });
 
   return (
-    <div className="flex flex-col gap-8 pb-[680px]">
-      {Object.entries(groupedMenuData).map(([category, menus]) => (
+    <div className="flex flex-col pb-[680px]">
+      {sortedMenuData.map(([category, menus]) => (
         <div key={category} id={category}>
-          <h2 className="text-xl font-bold mb-4 text-slate-700">{category}</h2>
-          <div className="flex flex-col gap-4">
+          <h2 className=" font-bold mb-3 px-6 text-slate-700">{category}</h2>
+          <div className="flex flex-col gap-4 px-6">
             {menus.map((menu) => (
               <MenuItem key={menu.id} menu={menu} />
             ))}
           </div>
+          <hr className="my-8 h-4 py-2 bg-gray-100 border-0" />
         </div>
       ))}
     </div>
