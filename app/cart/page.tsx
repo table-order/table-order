@@ -4,12 +4,18 @@ import { useEffect, useState } from "react";
 import { useCartStore } from "../store/store";
 import FixedBottomCTA from "../components/FixedBottomCTA";
 import CustomButton from "../components/CustomButton";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
-  const { cartItems, addToCart, removeFromCart, updateQuantity } =
-    useCartStore();
+  const {
+    cartItems,
+    completeOrder,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+  } = useCartStore();
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const router = useRouter();
   useEffect(() => {
     setTotalPrice(
       cartItems.reduce(
@@ -39,7 +45,7 @@ export default function CartPage() {
                         onClick={() => {
                           removeFromCart(item.id);
                         }}
-                        className="size-10 fill-gray-400 hover:fill-gray-500 active:fill-gray-500"
+                        className="size-10 fill-tossgray-500 hover:fill-gray-500 active:fill-gray-500"
                       >
                         <path
                           strokeLinecap="round"
@@ -56,64 +62,69 @@ export default function CartPage() {
                   <div className="flex gap-3 justify-end">
                     <button
                       type="button"
-                      className="hover:bg-gray-300 active:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
+                      className="hover:bg-gray-300 active:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4"
                     >
                       옵션 변경
                     </button>
                     <div
                       id="count-button-group"
-                      className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
+                      className="flex rounded-xl gap-1 bg-gray-100"
                     >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          updateQuantity(item.id, item.quantity - 1);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="2.5"
-                          className="size-5 stroke-gray-500"
+                      <div id="count-minus" className="flex items-center p-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateQuantity(item.id, item.quantity - 1);
+                          }}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 12h14"
-                          />
-                        </svg>
-                      </button>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        min={1}
-                        max={50}
-                        onChange={(e) => {
-                          updateQuantity(item.id, Number(e.target.value));
-                        }}
-                        className="bg-white font-semibold text-gray-600 justify-center text-xl px-6 py-2 my-1 rounded-xl shadow-xs w-12"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          updateQuantity(item.id, item.quantity + 1);
-                        }}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            className={`size-5 ${
+                              item.quantity <= 1
+                                ? "stroke-gray-300"
+                                : "stroke-gray-500"
+                            }`}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 12h14"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div
+                        id="count-value"
+                        className="justify-center text-center bg-white font-semibold text-gray-600 text-xl py-2 my-1 rounded-xl shadow w-12"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="2.5"
-                          className="size-5 stroke-gray-500"
+                        {item.quantity}
+                      </div>
+                      <div id="count-plus" className="flex items-center p-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateQuantity(item.id, item.quantity + 1);
+                          }}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            className="size-5 stroke-gray-500"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 4.5v15m7.5-7.5h-15"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -144,7 +155,13 @@ export default function CartPage() {
             </div>
             <div className="bg-gray-100 h-[16px]"></div>
           </div>
-          <FixedBottomCTA buttonText="주문하기" />
+          <FixedBottomCTA
+            onClick={() => {
+              completeOrder();
+              router.push("/order/history");
+            }}
+            buttonText="주문하기"
+          />
         </>
       ) : (
         <CustomButton>메뉴 추가하기</CustomButton>
