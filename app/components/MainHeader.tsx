@@ -2,10 +2,20 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
+import Link from "next/link";
 
 export default function MainHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  if (pathname === "/order/history") {
+    return (
+      <div className="flex items-center p-3 text-slate-600">
+        <button onClick={() => router.back()}>
+          <ChevronLeftIcon className="size-8" />
+        </button>
+      </div>
+    );
+  }
   return (
     <div
       className={`flex items-center p-3 text-slate-600 ${
@@ -24,7 +34,7 @@ export default function MainHeader() {
         </p>
       ) : (
         <p className="ml-auto text-17 text-tossgray-800 font-semibold p-1">
-          주문내역
+          <Link href="/order/history">주문내역</Link>
         </p>
       )}
     </div>

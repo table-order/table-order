@@ -8,19 +8,30 @@ type CartItem = {
   quantity: number;
 };
 
+type Order = {
+  id: string; // 주문 ID (예: UUID 또는 타임스탬프)
+  items: CartItem[];
+  totalPrice: number;
+  orderTime: string;
+};
+
 type CartState = {
   cartItems: CartItem[];
+  orders: Order[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  completeOrder: () => void; // 주문 완료 함수
+  getOrderHistory: () => Order[];
 };
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cartItems: [],
+      orders: [],
       addToCart: (item) =>
         set((state) => {
           const existingItem = state.cartItems.find((i) => i.id === item.id);
@@ -55,6 +66,27 @@ export const useCartStore = create<CartState>()(
           (total, item) => total + item.price * item.quantity,
           0
         );
+      },
+      completeOrder: () => {
+        const { cartItems, getTotalPrice } = get();
+        const order: Order = {
+          id: Date.now().toString(),
+          items: [...cartItems],
+          totalPrice: getTotalPrice(),
+          orderTime: new Date().toLocaleString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }),
+        };
+        set((state) => ({
+          orders: [...state.orders, order],
+          cartItems: [],
+        }));
+      },
+      getOrderHistory: () => {
+        const { orders } = get();
+        return orders; // 주문 내역 반환
       },
     }),
     {
