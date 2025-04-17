@@ -2,12 +2,20 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useCartStore } from "../store/store";
+import FixedBottomCTA from "../components/FixedBottomCTA";
+import CustomButton from "../components/CustomButton";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
-  const { cartItems, addToCart, removeFromCart, updateQuantity } =
-    useCartStore();
+  const {
+    cartItems,
+    completeOrder,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+  } = useCartStore();
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const router = useRouter();
   useEffect(() => {
     setTotalPrice(
       cartItems.reduce(
@@ -20,132 +28,147 @@ export default function CartPage() {
   return (
     <div id="container" className="font-sans">
       <div id="myMenu" className="px-6 pt-6 pb-4">
-        <p className="font-bold mb-5 text-xl">내 메뉴</p>
-        {cartItems.map((item) => (
-          <li key={item.id} className="flex items-center mb-5">
-            <div className="flex flex-col w-full">
-              <div className="flex items-center justify-between text-lg font-medium text-gray-800">
-                <span>{item.name}</span>
-                <button type="button">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="white"
-                    onClick={() => {
-                      removeFromCart(item.id);
-                    }}
-                    className="size-10 fill-gray-400 hover:fill-gray-500 active:fill-gray-500"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="text-lg font-semibold mb-4 text-gray-800">
-                {item.price.toLocaleString()}원
-              </div>
+        <p className="font-semibold mb-5 text-xl">내 메뉴</p>
+        {/* 장바구니 1개 이상이면 아이템 보여주기*/}
+        {cartItems.length ? (
+          <div id="items-group">
+            {cartItems.map((item) => (
+              <li key={item.id} className="flex items-center mb-5">
+                <div className="flex flex-col w-full">
+                  <div className="flex items-center justify-between text-lg font-normal text-gray-800">
+                    <span>{item.name}</span>
+                    <button type="button">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="white"
+                        onClick={() => {
+                          removeFromCart(item.id);
+                        }}
+                        className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="text-lg font-semibold mb-4 text-gray-800">
+                    {(item.quantity * item.price).toLocaleString()}원
+                  </div>
 
-              <div className="flex gap-3 justify-end">
-                <button
-                  type="button"
-                  className="hover:bg-gray-300 active:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4 py-2"
-                >
-                  옵션 변경
-                </button>
-                <div
-                  id="count-button-group"
-                  className="flex items-center px-3 rounded-lg gap-1 bg-gray-100 text-gray-500"
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      updateQuantity(item.id, item.quantity - 1);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      className="size-5 stroke-gray-500"
+                  <div className="flex gap-3 justify-end">
+                    <button
+                      type="button"
+                      className="hover:bg-gray-300 active:bg-gray-300 transition font-medium rounded-lg bg-tossgray-400 text-tossgray-600 px-4"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 12h14"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="number"
-                    value={item.quantity ?? 1}
-                    min={1}
-                    max={50}
-                    onChange={(e) => {
-                      updateQuantity(item.id, Number(e.target.value));
-                    }}
-                    className="bg-white font-semibold text-gray-600 justify-center text-center text-lg px-6 py-2 my-1 rounded-xl shadow-xs w-12"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      updateQuantity(item.id, item.quantity + 1);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      className="size-5 stroke-gray-500"
+                      옵션 변경
+                    </button>
+                    <div
+                      id="count-button-group"
+                      className="flex rounded-xl gap-1 bg-tossgray-400"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                  </button>
+                      <div id="count-minus" className="flex items-center p-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateQuantity(item.id, item.quantity - 1);
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            className={`size-5 ${
+                              item.quantity <= 1
+                                ? "stroke-gray-300"
+                                : "stroke-gray-500"
+                            }`}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 12h14"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div
+                        id="count-value"
+                        className="justify-center text-center bg-white font-medium text-gray-800 text-xl py-2 my-1 rounded-xl shadow w-12"
+                      >
+                        {item.quantity}
+                      </div>
+                      <div id="count-plus" className="flex items-center p-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateQuantity(item.id, item.quantity + 1);
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            className="size-5 stroke-gray-500"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 4.5v15m7.5-7.5h-15"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </li>
-        ))}
+              </li>
+            ))}
+          </div>
+        ) : (
+          //장바구니 비었을때 표시
+          <p className="text-tossgray-500">담은 메뉴가 없어요</p>
+        )}
       </div>
 
-      <div
-        id="go-to-menu-group"
-        className="hover:bg-gray-200 active:bg-gray-200"
-      >
-        <div className="h-px bg-gray-200"></div>
-        <div className="flex justify-center my-3">
-          <Link
-            href="/"
-            className=" text-blue-500 text-lg font-medium hover:bg-gray-300 rounded-lg py-2 px-4
-            active:text-sm transition-transform duration-100"
-            style={{ minHeight: "44px" }}
+      {/* 장바구니 0개면 메뉴추가하기, 1개 이상이면 주문하기 버튼 */}
+      {cartItems.length > 0 ? (
+        <>
+          <div
+            id="go-to-menu-group"
+            className="hover:bg-gray-200 active:bg-gray-200"
           >
-            메뉴 더 추가 +
-          </Link>
-        </div>
-        <div className="bg-gray-100 h-[16px]"></div>
-      </div>
-
-      <div
-        id="order-button-group"
-        className="font-medium text-lg fixed bottom-0 left-0 right-0 px-4 pb-4"
-      >
-        <button className="flex justify-center items-center mx-auto w-full bg-blue-500 rounded-xl text-white px-4 py-2 hover:bg-blue-600 active:bg-blue-600">
-          <span className="mr-2 font-semibold text-sm bg-white text-blue-500 px-2 py-0.5 rounded-lg">
-            {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-          </span>
-          <span>{totalPrice.toLocaleString()}</span>원 주문하기
-        </button>
-      </div>
+            <div className="h-px bg-gray-200"></div>
+            <div className="flex justify-center my-3">
+              <Link
+                href="/"
+                className=" text-blue-500 text-lg font-normal hover:bg-gray-300 rounded-lg py-2 px-4
+            active:text-sm transition-transform duration-100"
+                style={{ minHeight: "44px" }}
+              >
+                메뉴 더 추가 +
+              </Link>
+            </div>
+            <div className="bg-gray-100 h-[16px]"></div>
+          </div>
+          <FixedBottomCTA
+            onClick={() => {
+              completeOrder();
+              router.push("/order/history");
+            }}
+            buttonText="주문하기"
+          />
+        </>
+      ) : (
+        <CustomButton>메뉴 추가하기</CustomButton>
+      )}
     </div>
   );
 }
