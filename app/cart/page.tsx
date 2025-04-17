@@ -28,13 +28,14 @@ export default function CartPage() {
   return (
     <div id="container" className="font-sans">
       <div id="myMenu" className="px-6 pt-6 pb-4">
-        <p className="font-bold mb-5 text-xl">내 메뉴</p>
+        <p className="font-semibold mb-5 text-xl">내 메뉴</p>
+        {/* 장바구니 1개 이상이면 아이템 보여주기*/}
         {cartItems.length ? (
           <div id="items-group">
             {cartItems.map((item) => (
               <li key={item.id} className="flex items-center mb-5">
                 <div className="flex flex-col w-full">
-                  <div className="flex items-center justify-between text-lg font-medium text-gray-800">
+                  <div className="flex items-center justify-between text-lg font-normal text-gray-800">
                     <span>{item.name}</span>
                     <button type="button">
                       <svg
@@ -45,7 +46,7 @@ export default function CartPage() {
                         onClick={() => {
                           removeFromCart(item.id);
                         }}
-                        className="size-10 fill-tossgray-500 hover:fill-gray-500 active:fill-gray-500"
+                        className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
                       >
                         <path
                           strokeLinecap="round"
@@ -62,13 +63,13 @@ export default function CartPage() {
                   <div className="flex gap-3 justify-end">
                     <button
                       type="button"
-                      className="hover:bg-gray-300 active:bg-gray-300 transition font-semibold rounded-lg bg-gray-100 text-gray-500 px-4"
+                      className="hover:bg-gray-300 active:bg-gray-300 transition font-medium rounded-lg bg-tossgray-400 text-tossgray-600 px-4"
                     >
                       옵션 변경
                     </button>
                     <div
                       id="count-button-group"
-                      className="flex rounded-xl gap-1 bg-gray-100"
+                      className="flex rounded-xl gap-1 bg-tossgray-400"
                     >
                       <div id="count-minus" className="flex items-center p-3">
                         <button
@@ -99,7 +100,7 @@ export default function CartPage() {
 
                       <div
                         id="count-value"
-                        className="justify-center text-center bg-white font-semibold text-gray-600 text-xl py-2 my-1 rounded-xl shadow w-12"
+                        className="justify-center text-center bg-white font-medium text-gray-800 text-xl py-2 my-1 rounded-xl shadow w-12"
                       >
                         {item.quantity}
                       </div>
@@ -132,10 +133,12 @@ export default function CartPage() {
             ))}
           </div>
         ) : (
+          //장바구니 비었을때 표시
           <p className="text-tossgray-500">담은 메뉴가 없어요</p>
         )}
       </div>
 
+      {/* 장바구니 0개면 메뉴추가하기, 1개 이상이면 주문하기 버튼 */}
       {cartItems.length > 0 ? (
         <>
           <div
@@ -146,7 +149,7 @@ export default function CartPage() {
             <div className="flex justify-center my-3">
               <Link
                 href="/"
-                className=" text-blue-500 text-lg font-medium hover:bg-gray-300 rounded-lg py-2 px-4
+                className=" text-blue-500 text-lg font-normal hover:bg-gray-300 rounded-lg py-2 px-4
             active:text-sm transition-transform duration-100"
                 style={{ minHeight: "44px" }}
               >
