@@ -47,7 +47,7 @@ export default async function MenuList() {
               <MenuItem key={menu.id} menu={menu} />
             ))}
           </div>
-          <hr className="my-8 h-4 py-2 bg-tossgray-500 border-0" />
+          <hr className="my-8 h-4 py-2 bg-tossgray-400 border-0" />
         </div>
       ))}
     </div>
