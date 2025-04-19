@@ -37,7 +37,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
   };
   return (
     <div>
-      <div className="flex flex-col gap-8 p-6 ">
+      <div className="flex flex-col gap-8 p-6 pb-32">
         <div>
           <h2 className="font-bold text-tossgray-900 text-22">{menu.name}</h2>
           <p className="text-17 text-tossgray-600 font-medium">
