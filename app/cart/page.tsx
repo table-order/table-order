@@ -5,15 +5,12 @@ import { useCartStore } from "../store/store";
 import FixedBottomCTA from "../components/FixedBottomCTA";
 import CustomButton from "../components/CustomButton";
 import { useRouter } from "next/navigation";
+import { useToastStore } from "../store/toastStore";
 
 export default function CartPage() {
-  const {
-    cartItems,
-    completeOrder,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-  } = useCartStore();
+  const { cartItems, completeOrder, removeFromCart, updateQuantity } =
+    useCartStore();
+  const addToast = useToastStore((state) => state.addToast);
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
   useEffect(() => {
@@ -37,7 +34,7 @@ export default function CartPage() {
                 <div className="flex flex-col w-full">
                   <div className="flex items-center justify-between text-lg font-normal text-gray-800">
                     <span>{item.name}</span>
-                    <button type="button">
+                    <button id="delete-item" type="button">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -45,6 +42,7 @@ export default function CartPage() {
                         stroke="white"
                         onClick={() => {
                           removeFromCart(item.id);
+                          addToast("메뉴를 삭제했어요", "success");
                         }}
                         className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
                       >
