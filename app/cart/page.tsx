@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useCartStore } from "../store/store";
 import FixedBottomCTA from "../components/FixedBottomCTA";
 import CustomButton from "../components/CustomButton";
@@ -11,16 +10,7 @@ export default function CartPage() {
   const { cartItems, completeOrder, removeFromCart, updateQuantity } =
     useCartStore();
   const addToast = useToastStore((state) => state.addToast);
-  const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
-  useEffect(() => {
-    setTotalPrice(
-      cartItems.reduce(
-        (acc: number, item) => acc + item.quantity * item.price,
-        0
-      )
-    );
-  }, [cartItems]);
 
   return (
     <div id="container" className="font-sans">
