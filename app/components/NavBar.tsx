@@ -100,7 +100,7 @@ export default function NavBar() {
                   카테고리를 선택해주세요
                 </h2>
                 <div className="text-17 w-full grid grid-cols-2 gap-4 animate-fade-up">
-                  {navItems.map((item, index) => (
+                  {navItems.map((item) => (
                     <NavItem
                       key={item.label}
                       label={item.label}
