@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCartStore } from "../store/store";
 import { useRouter } from "next/navigation";
 import FixedBottomCTA from "./FixedBottomCTA";
+import { useToastStore } from "../store/toastStore";
 
 type MenuDetailContentProps = {
   menu: {
@@ -21,7 +22,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
   const discountedPrice = null;
   const { addToCart } = useCartStore();
   const router = useRouter();
-
+  const addToast = useToastStore((state) => state.addToast);
   const menuPrice = `${(amount * menu.price).toLocaleString()}`;
 
   const handleAddToCart = () => {
@@ -32,6 +33,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
       quantity: amount,
     });
     router.push("/");
+    addToast("장바구니에 메뉴를 추가했어요", "success");
   };
   return (
     <div>
