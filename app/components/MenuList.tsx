@@ -36,8 +36,8 @@ export default async function MenuList() {
   });
 
   return (
-    <div className="flex flex-col pb-[680px]">
-      {sortedMenuData.map(([category, menus]) => (
+    <div className="flex flex-col">
+      {sortedMenuData.map(([category, menus], index) => (
         <div key={category} id={category}>
           <h2 className="font-bold text-17 mb-3 px-6 text-tossgray-800">
             {category}
@@ -47,7 +47,11 @@ export default async function MenuList() {
               <MenuItem key={menu.id} menu={menu} />
             ))}
           </div>
-          <hr className="my-8 h-4 py-2 bg-tossgray-400 border-0" />
+          {index !== sortedMenuData.length - 1 ? (
+            <hr className="my-8 h-4 py-2 bg-tossgray-400 border-0" />
+          ) : (
+            <hr className="bg-white border-0 p-3" />
+          )}
         </div>
       ))}
     </div>
