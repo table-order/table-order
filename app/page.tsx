@@ -1,4 +1,5 @@
 import FixedBottomCTA from "./components/FixedBottomCTA";
+import MainFooter from "./components/MainFooter";
 import MenuList from "./components/MenuList";
 import NavBar from "./components/NavBar";
 
@@ -20,6 +21,7 @@ export default function Home() {
         </div>
         <NavBar />
         <MenuList />
+        <MainFooter />
       </main>
       <FixedBottomCTA defaultRoute="/cart" buttonText="장바구니 보기" />
     </div>
