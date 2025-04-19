@@ -38,7 +38,7 @@ export default function HistoryPage() {
 
   return (
     <>
-      <article className="p-6">
+      <article className="p-6 mb-[112px]">
         <div className="flex flex-col">
           <span className="text-[28px] font-bold text-tossgray-900">
             주문 내역
@@ -61,7 +61,7 @@ export default function HistoryPage() {
                 {displayTotalItems}개 | {displayTotalPrice}원
               </span>
             </div>
-            {orderHistory.map((order) => {
+            {orderHistory.map((order, index) => {
               const totalItems = order.items.reduce(
                 (total, item) => total + item.quantity,
                 0
@@ -70,7 +70,7 @@ export default function HistoryPage() {
                 <div key={order.id}>
                   <div className="flex justify-between mt-6 mb-5">
                     <span className="text-tossgray-800 text-17 font-bold">
-                      최근 주문 내역 ({totalItems}개)
+                      {index === 0 ? "최근" : "이전"} 주문 내역 ({totalItems}개)
                     </span>
                     <span className="text-tossgray-700 text-15">
                       {order.orderTime}
@@ -91,7 +91,9 @@ export default function HistoryPage() {
                       </div>
                     ))}
                   </div>
-                  <hr className="my-6 text-tossgray-400" />
+                  {index !== orderHistory.length - 1 ? (
+                    <hr className="my-6 text-tossgray-400" />
+                  ) : null}
                 </div>
               );
             })}

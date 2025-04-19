@@ -2,18 +2,38 @@
 
 import NavItem from "./NavItem";
 import { useEffect, useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 const navItems = [
-  { label: "단품", href: "#단품" },
-  { label: "세트", href: "#세트" },
-  { label: "사이드", href: "#사이드" },
-  { label: "음료", href: "#음료" },
-  { label: "직원호출", href: "#직원호출" },
+  { label: "단품", href: "단품" },
+  { label: "세트", href: "세트" },
+  { label: "사이드", href: "사이드" },
+  { label: "음료", href: "음료" },
 ];
 
 export default function NavBar() {
   const [isFixed, setIsFixed] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (modalStatus || isClosing) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [modalStatus, isClosing]);
+
+  const onHandleModalStatus = () => {
+    if (modalStatus) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setModalStatus(false); // 애니메이션 완료 후 모달창 상태 업데이트
+        setIsClosing(false);
+      }, 200);
+    } else {
+      setModalStatus(true);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,14 +61,60 @@ export default function NavBar() {
             <NavItem key={item.label} label={item.label} href={item.href} />
           ))}
           <button
+            onClick={onHandleModalStatus}
             className={`absolute ${
               isFixed ? "right-6" : "right-6"
-            } top-7 transform -translate-y-1/2 w-6 h-6 rounded-full text-sm font-semibold text-gray-700 opacity-75 bg-gray-200 flex items-center justify-center`}
+            } top-7 transform -translate-y-1/2 w-8 h-8 rounded-full text-sm font-semibold text-tossgray-600 opacity-75 bg-tossgray-400 flex items-center justify-center`}
           >
-            <ChevronDownIcon className="size-4" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-4.5"
+              strokeWidth="1.5"
+              stroke="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+                clip-rule="evenodd"
+              />
+            </svg>
           </button>
         </div>
       </div>
+      {(modalStatus || isClosing) && (
+        <div className="fixed inset-0 z-50" onClick={onHandleModalStatus}>
+          {/* 배경 */}
+          <div className="fixed inset-0 bg-black opacity-20"></div>
+          {/* 모달창 내용 */}
+          <div className="fixed inset-0 flex items-end justify-center">
+            <div
+              className={`bg-white p-6 m-2 w-full rounded-3xl shadow-lg flex flex-col items-start ${
+                isClosing ? "animate-slide-down" : "animate-slide-up"
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="animate-fade-up w-full">
+                <h2 className="text-xl font-bold mb-8">
+                  카테고리를 선택해주세요
+                </h2>
+                <div className="text-17 w-full grid grid-cols-2 gap-4 animate-fade-up">
+                  {navItems.map((item, index) => (
+                    <NavItem
+                      key={item.label}
+                      label={item.label}
+                      href={item.href}
+                      onClick={onHandleModalStatus}
+                      isModal={true}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

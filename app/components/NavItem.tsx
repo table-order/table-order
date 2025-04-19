@@ -2,36 +2,35 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useHash } from "../hooks/useHash";
 import { useInView } from "react-intersection-observer";
 
 type NavItemProps = {
   label: string;
   href: string;
+  onClick?: () => void;
+  isModal?: boolean;
 };
 
-export default function NavItem({ label, href }: NavItemProps) {
-  const hash = useHash(); // 현재 해시 값 가져오기
+export default function NavItem({
+  label,
+  href,
+  onClick,
+  isModal,
+}: NavItemProps) {
   const [isActive, setIsActive] = useState(false);
-  const sectionId = href.substring(1);
   const { ref, inView } = useInView({
     threshold: 0,
     rootMargin: "0px 0px -100% 0px", // 섹션의 상단이 최상단에 닿는지 감지
   });
 
   useEffect(() => {
-    setIsActive(decodeURIComponent(hash) === decodeURIComponent(href));
-  }, [hash, href]);
-
-  useEffect(() => {
-    const sectionElement = document.getElementById(sectionId);
+    const sectionElement = document.getElementById(href);
     if (sectionElement) {
       ref(sectionElement); // ref를 섹션 요소에 연결
     }
-  }, [sectionId, ref]);
+  }, [href, ref]);
 
   useEffect(() => {
-    console.log(`inView: ${inView}`);
     if (inView) {
       setIsActive(true); // 섹션의 상단이 최상단에 닿아 있으면 isActive를 true로 설정
     } else {
@@ -41,9 +40,12 @@ export default function NavItem({ label, href }: NavItemProps) {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    const sectionElement = document.getElementById(sectionId);
+    const sectionElement = document.getElementById(href);
     if (sectionElement) {
       sectionElement.scrollIntoView({ behavior: "smooth" });
+    }
+    if (onClick) {
+      onClick();
     }
   };
 
@@ -51,11 +53,13 @@ export default function NavItem({ label, href }: NavItemProps) {
     <Link href={href} onClick={handleClick}>
       <div
         className={`flex-shrink-0 text-17 py-2 mr-6 font-semibold
-       ${
-         isActive
-           ? "border-b-2 border-b-tossgray-800 text-tossgray-800"
-           : "text-tossgray-600"
-       }`}
+           ${
+             isActive
+               ? isModal
+                 ? "text-tossblue-500"
+                 : "border-b-2 border-b-tossgray-800 text-tossgray-800"
+               : "text-tossgray-800"
+           }`}
       >
         {label}
       </div>

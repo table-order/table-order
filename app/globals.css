@@ -28,6 +28,53 @@
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     animation-iteration-count: infinite;
   }
+
+  @keyframes slide-up {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-down {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  .animate-slide-up {
+    animation-name: slide-up;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-out;
+  }
+
+  .animate-slide-down {
+    animation-name: slide-down;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-out;
+  }
+  @keyframes fade-up {
+    0% {
+      opacity: 0.3;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation-name: fade-up;
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-fill-mode: both;
+  }
 }
 
 @theme {
