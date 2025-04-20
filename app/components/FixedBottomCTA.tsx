@@ -50,7 +50,7 @@ export default function FixedBottomCTA({
   }
 
   return (
-    <div className="fixed left-0 right-0 bottom-0 p-6 h-[112px] flex justify-center items-center bg-white z-49">
+    <div className="fixed left-0 right-0 bottom-0 p-6 h-[112px] flex justify-center items-center bg-linear-to-t from-white from-75% to-transparent z-49">
       <button
         onClick={handleClick}
         className="py-3 w-full font-semibold text-xl text-white text-center rounded-2xl bg-tossblue-500 max-w-md animate-custom animate-duration-[1s] animate-ease-[cubic-bezier(0.25,0.1,0.25,1)]"
