@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <main className="">
-        <div className="flex justify-between py-8 px-6">
+        <div className="flex justify-between py-7 px-6">
           <div className="flex flex-col">
             <span className="text-22 text-tossgray-900 font-bold">
               포스트버거(Post Burger)

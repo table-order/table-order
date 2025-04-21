@@ -1,8 +1,16 @@
+"use client";
+
+import { useCartStore } from "../store/store";
 import FooterInfo from "./FooterInfo";
 
 export default function MainFooter() {
+  const { cartItems } = useCartStore();
   return (
-    <footer className="bg-tossgray-400 p-6 text-13 pb-32 ">
+    <footer
+      className={`bg-tossgray-400 p-6 text-13 ${
+        cartItems.length > 0 ? "pb-32" : ""
+      }`}
+    >
       <div className="flex flex-col gap-3">
         <span className="text-tossgray-700 font-semibold">가게정보·원산지</span>
         <FooterInfo label="상호명">토스 카페</FooterInfo>

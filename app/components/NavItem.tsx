@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -19,8 +18,8 @@ export default function NavItem({
 }: NavItemProps) {
   const [isActive, setIsActive] = useState(false);
   const { ref, inView } = useInView({
-    threshold: 0,
-    rootMargin: "0px 0px -100% 0px", // 섹션의 상단이 최상단에 닿는지 감지
+    threshold: 0.2,
+    rootMargin: "0px 0px -79% 0px",
   });
 
   useEffect(() => {
@@ -50,19 +49,21 @@ export default function NavItem({
   };
 
   return (
-    <Link href={href} onClick={handleClick}>
+    <button onClick={handleClick}>
       <div
-        className={`flex-shrink-0 text-17 py-2 mr-6 font-semibold
-           ${
-             isActive
-               ? isModal
-                 ? "text-tossblue-500"
-                 : "border-b-2 border-b-tossgray-800 text-tossgray-800"
-               : "text-tossgray-800"
-           }`}
+        className={`flex-shrink-0 text-17 py-2 mr-6 font-semibold relative flex ${
+          isActive
+            ? isModal
+              ? "text-tossblue-500"
+              : "text-tossgray-800"
+            : "text-tossgray-600"
+        }`}
       >
         {label}
+        {isActive && !isModal && (
+          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-tossgray-800"></div>
+        )}
       </div>
-    </Link>
+    </button>
   );
 }
