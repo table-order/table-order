@@ -1,5 +1,6 @@
 "use client";
 
+import { useNavStore } from "../store/navStore";
 import NavItem from "./NavItem";
 import { useEffect, useState } from "react";
 
@@ -11,16 +12,24 @@ const navItems = [
 ];
 
 export default function NavBar() {
-  const [isFixed, setIsFixed] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-
+  const { isFixed, setIsFixed } = useNavStore();
   useEffect(() => {
     if (modalStatus || isClosing) {
+      // 스크롤 막기
       document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none"; // iOS에서 터치 스크롤 막기
     } else {
+      // 스크롤 허용
       document.body.style.overflow = "auto";
+      document.body.style.touchAction = ""; // iOS에서 터치 스크롤 허용
     }
+
+    return () => {
+      document.body.style.overflow = "auto";
+      document.body.style.touchAction = "";
+    };
   }, [modalStatus, isClosing]);
 
   const onHandleModalStatus = () => {
@@ -88,7 +97,10 @@ export default function NavBar() {
           {/* 배경 */}
           <div className="fixed inset-0 bg-black opacity-20"></div>
           {/* 모달창 내용 */}
-          <div className="fixed inset-0 flex items-end justify-center">
+          <div
+            className="fixed inset-0 flex items-end justify-center"
+            style={{ paddingBottom: `env(safe-area-inset-bottom)` }}
+          >
             <div
               className={`bg-white p-6 m-2 w-full rounded-3xl shadow-lg flex flex-col items-start ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
