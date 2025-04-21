@@ -8,6 +8,7 @@ import CallButton from "./CallButton";
 export default function MainHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  if (pathname === "/order/complete") return;
   if (pathname === "/order/history") {
     return (
       <div className="flex items-center p-3 text-slate-600">
