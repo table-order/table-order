@@ -102,7 +102,7 @@ export default function NavBar() {
             style={{ paddingBottom: `env(safe-area-inset-bottom)` }}
           >
             <div
-              className={`bg-white p-6 m-2 w-full rounded-3xl shadow-lg flex flex-col items-start ${
+              className={`bg-white p-7 m-2 w-full rounded-3xl shadow-lg flex flex-col items-start ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
               }`}
               onClick={(e) => e.stopPropagation()}
