@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
         hostname: "ptrgxcgkobowwhhliveh.supabase.co",
         pathname: "**",
       },
+      new URL("https://static.toss.im/3d-emojis/u1F44F-apng.png"),
     ],
   },
 };
