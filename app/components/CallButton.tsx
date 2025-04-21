@@ -64,15 +64,18 @@ export default function CallButton() {
 
   return (
     <div>
-      <p className="flex items-start justify-start gap-1 ml-auto text-17 text-tossgray-700 font-semibold p-1">
+      <button
+        className="flex items-start justify-start gap-1 ml-auto text-17 text-tossgray-700 font-semibold p-1"
+        onClick={onHandleModalStatus}
+      >
         <Image
           src="https://static.toss.im/2d-emojis/svg/u1F6CE.svg"
           alt="직원호출"
           width={24}
           height={24}
         />
-        <button onClick={onHandleModalStatus}>직원호출</button>
-      </p>
+        <span>직원호출</span>
+      </button>
       {(modalStatus || isClosing) && (
         <div className="fixed inset-0 z-50" onClick={onHandleModalStatus}>
           {/* 배경 */}
