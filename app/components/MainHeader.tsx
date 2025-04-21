@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
+import CallButton from "./CallButton";
 
 export default function MainHeader() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function MainHeader() {
         pathname === "/cart" ? "grid grid-cols-3" : "justify-between"
       }`}
     >
+      {pathname === "/" && <CallButton />}
       {pathname !== "/" && (
         <button onClick={() => router.back()}>
           <ChevronLeftIcon className="size-8" />
