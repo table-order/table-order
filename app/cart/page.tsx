@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import { useToastStore } from "../store/toastStore";
 
 export default function CartPage() {
-  const { cartItems, completeOrder, removeFromCart, updateQuantity } =
-    useCartStore();
+  const { cartItems, removeFromCart, updateQuantity } = useCartStore();
   const addToast = useToastStore((state) => state.addToast);
   const router = useRouter();
 
@@ -149,7 +148,6 @@ export default function CartPage() {
           <FixedBottomCTA
             onClick={() => {
               //TODO: 모달창 띄우기
-              completeOrder();
               router.push("/order/complete");
             }}
             buttonText="주문하기"
