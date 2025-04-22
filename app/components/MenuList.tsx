@@ -42,7 +42,7 @@ export default async function MenuList() {
           <h2 className="font-bold text-17 mb-3 px-6 text-tossgray-800 pt-6">
             {category}
           </h2>
-          <div className="flex flex-col gap-4 px-6 pb-6">
+          <div className="flex flex-col gap-4 pb-6">
             {menus.map((menu) => (
               <MenuItem key={menu.id} menu={menu} />
             ))}

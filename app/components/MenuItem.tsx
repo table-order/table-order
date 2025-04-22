@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 type MenuProps = {
   menu: {
@@ -13,10 +16,30 @@ type MenuProps = {
 };
 
 function MenuItem({ menu }: MenuProps) {
+  const [isTouched, setIsTouched] = useState(false);
+  const handleTouchStart = () => {
+    setIsTouched(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsTouched(false);
+  };
+
+  const handleTouchCancel = () => {
+    setIsTouched(false);
+  };
   return (
     <Link
       href={`/menu/${menu.id}`}
-      className="flex items-center justify-between gap-4 cursor-pointer"
+      className={`flex items-center justify-between gap-4 px-6 py-2 cursor-pointer 
+        transition-all duration-150 ease-in-out 
+        ${
+          isTouched ? "bg-tossgray-100 scale-95 bg-tossgray-400 rounded-lg" : ""
+        }
+      `}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
     >
       <div className="flex flex-col">
         <span className="text-17 text-tossgray-800 whitespace-normal break-words font-semibold">
