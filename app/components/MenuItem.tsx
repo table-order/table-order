@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import CustomBadge, { BadgeType } from "./CustomBadge";
 
 type MenuProps = {
   menu: {
@@ -12,6 +13,7 @@ type MenuProps = {
     description?: string;
     imageUrl: string;
     category: string;
+    tag: BadgeType;
   };
 };
 
@@ -42,6 +44,7 @@ function MenuItem({ menu }: MenuProps) {
       onTouchCancel={handleTouchCancel}
     >
       <div className="flex flex-col">
+        <CustomBadge type={menu.tag} />
         <span className="text-17 text-tossgray-800 whitespace-normal break-words font-semibold">
           {menu.name}
         </span>
