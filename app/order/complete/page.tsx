@@ -3,18 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Progress from "./progress";
+import { useCartStore } from "@/app/store/store";
+import OrderHistory from "@/app/components/OrderHistory";
 
 export default function CompletePage() {
   const [isLoading, setLoading] = useState(true);
+  const { completeOrder } = useCartStore();
 
   //주문중...먼저 3초간 로딩 후, 주문완료 페이지 렌더링
 
   useEffect(() => {
+    completeOrder();
     const timer = setTimeout(() => {
       setLoading((pre) => !pre);
     }, 3000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [completeOrder]);
 
   if (isLoading) {
     return (
@@ -44,8 +48,9 @@ export default function CompletePage() {
             aria-hidden="true"
           />
         </div>
-        {/* TODO: 주문 내역 추가예정 */}
+        <OrderHistory />
       </article>
+      
       <div className="fixed left-0 right-0 bottom-0 p-6 h-[112px] flex justify-center items-center bg-white z-50">
         <button className="py-4 w-full text-17 font-semibold text-xl text-white text-center rounded-2xl bg-tossblue-500 max-w-md">
           <Link href="/" className="flex gap-2 justify-center items-center">

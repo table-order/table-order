@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useToastStore } from "../store/toastStore";
 
 const callOptions = ["물", "냅킨", "직원부르기"];
 
@@ -9,6 +10,7 @@ export default function CallButton() {
   const [modalStatus, setModalStatus] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const addToast = useToastStore((state) => state.addToast);
 
   const onHandleModalStatus = () => {
     if (modalStatus) {
@@ -39,6 +41,7 @@ export default function CallButton() {
     setModalStatus(false);
     setSelectedOptions([]);
     // 호출하기 로직 추가 (API 호출)
+    addToast("호출했어요", "success");
   };
 
   useEffect(() => {
