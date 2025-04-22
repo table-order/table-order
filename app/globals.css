@@ -75,6 +75,33 @@
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     animation-fill-mode: both;
   }
+  @keyframes slowVibrate {
+    0% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-1.5px);
+    }
+    40% {
+      transform: translateX(1.5px);
+    }
+    60% {
+      transform: translateX(-1.5px);
+    }
+    80% {
+      transform: translateX(1.5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-shake {
+    animation-name: slowVibrate;
+    animation-duration: 0.2s; /* 필요에 따라 조절 */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
 }
 
 @theme {
@@ -89,7 +116,18 @@
   --color-tossgray-500: #8b95a1;
   --color-tossgray-400: #f2f4f6;
   --color-tossgray-300: #b0b8c1;
+  --color-tossgray-200: #e5e8eb;
   --color-tossblue-500: #3182f6;
+
+  /* --color-tossgray-900: #191f28;
+  --color-tossgray-800: #333d4b;
+  --color-tossgray-700: #4e5968;
+  --color-tossgray-600: #6b7684;
+  --color-tossgray-500: #8b95a1;
+  --color-tossgray-400: #b0b8c1;
+  --color-tossgray-300: #e5e8eb;
+  --color-tossgray-200: #f2f4f6;
+  --color-tossblue-500: #3182f6; */
 }
 
 @theme inline {

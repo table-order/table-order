@@ -26,6 +26,7 @@ export default function CallButton() {
 
   const handleCloseButton = () => {
     setModalStatus(false);
+    setSelectedOptions([]);
   };
 
   const handleOptionChange = (option: string) => {
