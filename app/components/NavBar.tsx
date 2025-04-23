@@ -58,7 +58,7 @@ export default function NavBar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [setIsFixed]);
 
   return (
     <div

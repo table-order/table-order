@@ -8,11 +8,6 @@ import {
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/app/store/store";
 
-type Amount = {
-  currency: string;
-  value: number;
-};
-
 function generateRandomString() {
   return window.btoa(Math.random().toString()).slice(0, 20);
 }
@@ -22,16 +17,12 @@ function generateRandomString() {
 // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
 // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = generateRandomString();
+// const customerKey = generateRandomString();
 
 export default function WidgetCheckoutPage() {
   const { getTotalPrice, cartItems } = useCartStore();
   const totalPrice = getTotalPrice();
 
-  const [amount, setAmount] = useState<Amount>({
-    currency: "KRW",
-    value: totalPrice,
-  });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
@@ -55,7 +46,7 @@ export default function WidgetCheckoutPage() {
     }
 
     fetchPaymentWidgets();
-  }, [clientKey, customerKey]);
+  }, []);
 
   useEffect(() => {
     async function renderPaymentWidgets() {
@@ -67,7 +58,10 @@ export default function WidgetCheckoutPage() {
       // TODO: 위젯의 결제금액을 결제하려는 금액으로 초기화하세요.
       // TODO: renderPaymentMethods, renderAgreement, requestPayment 보다 반드시 선행되어야 합니다.
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-      await widgets.setAmount(amount);
+      await widgets.setAmount({
+        currency: "KRW",
+        value: totalPrice,
+      });
 
       await Promise.all([
         // ------  결제 UI 렌더링 ------
@@ -91,7 +85,7 @@ export default function WidgetCheckoutPage() {
     }
 
     renderPaymentWidgets();
-  }, [widgets]);
+  }, [widgets, totalPrice]);
 
   return (
     <div className="wrapper">
