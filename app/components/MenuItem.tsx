@@ -43,7 +43,8 @@ function MenuItem({ menu }: MenuProps) {
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
     >
-      <div className="flex flex-col">
+
+    <div className="flex flex-col items-start">
         <CustomBadge type={menu.tag} />
         <span className="text-17 text-tossgray-800 whitespace-normal break-words font-semibold">
           {menu.name}

@@ -148,7 +148,7 @@ export default function CartPage() {
           <FixedBottomCTA
             onClick={() => {
               //TODO: 모달창 띄우기
-              router.push("/order/complete");
+              router.push("/order/checkout");
             }}
             buttonText="주문하기"
           />

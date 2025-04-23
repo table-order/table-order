@@ -203,7 +203,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
       clearTimeout(holdTimeout);
       clearInterval(holdTimeout as unknown as NodeJS.Timeout);
     }
-  }, [isHoldingRight, isHoldingLeft]);
+  }, [isHoldingRight, isHoldingLeft, holdTimeout]);
 
   useEffect(() => {
     return () => {

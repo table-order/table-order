@@ -11,6 +11,89 @@
   --foreground: #171717;
 }
 
+/* 추가된 스타일 */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 24px;
+  overflow: auto;
+}
+
+.btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f2f4f6;
+  color: #4e5968;
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background-color: #3282f6;
+  color: #f9fcff;
+}
+
+.confirm-loading {
+  margin-top: 72px;
+  height: 400px;
+  justify-content: space-between;
+}
+
+.confirm-success {
+  display: none;
+  margin-top: 72px;
+}
+
+.button-group {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.title {
+  margin-top: 32px;
+  margin-bottom: 0;
+  color: #191f28;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.description {
+  margin-top: 8px;
+  color: #4e5968;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.response-section {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 20px;
+}
+
+.response-section .response-label {
+  font-weight: 600;
+  color: #333d48;
+  font-size: 17px;
+}
+
+.response-section .response-text {
+  font-weight: 500;
+  color: #4e5968;
+  font-size: 17px;
+  padding-left: 16px;
+  word-break: break-word;
+  text-align: right;
+}
+
 @layer utilities {
   @keyframes bounce {
     0%,
@@ -118,16 +201,6 @@
   --color-tossgray-300: #b0b8c1;
   --color-tossgray-200: #e5e8eb;
   --color-tossblue-500: #3182f6;
-
-  /* --color-tossgray-900: #191f28;
-  --color-tossgray-800: #333d4b;
-  --color-tossgray-700: #4e5968;
-  --color-tossgray-600: #6b7684;
-  --color-tossgray-500: #8b95a1;
-  --color-tossgray-400: #b0b8c1;
-  --color-tossgray-300: #e5e8eb;
-  --color-tossgray-200: #f2f4f6;
-  --color-tossblue-500: #3182f6; */
 }
 
 @theme inline {

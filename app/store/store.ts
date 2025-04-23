@@ -80,7 +80,7 @@ export const useCartStore = create<CartState>()(
           }),
         };
         set((state) => ({
-          orders: [...state.orders, order],
+          orders: [order, ...state.orders],
           cartItems: [],
         }));
       },
