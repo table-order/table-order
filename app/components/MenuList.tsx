@@ -1,3 +1,4 @@
+import { BadgeType } from "./CustomBadge";
 import MenuItem from "./MenuItem";
 import { createClient } from "@/utils/supabase/server";
 
@@ -8,6 +9,7 @@ interface MenuItem {
   description: string;
   imageUrl: string;
   category: string;
+  tag: BadgeType;
 }
 
 export default async function MenuList() {
