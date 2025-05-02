@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         pathname: "**",
       },
       new URL("https://static.toss.im/3d-emojis/u1F44F-apng.png"),
+      new URL("https://static.toss.im/lotties/error-spot-apng.png"),
     ],
   },
 };
