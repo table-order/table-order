@@ -144,7 +144,7 @@ export default function FixedBottomCTA({
     return () => {
       cartChanges.unsubscribe();
     };
-  }, [menuId, router, supabase, amount]);
+  }, [menuId, router, supabase, amount, addToast, menuPrice]);
 
   // onClick이 제공되지 않으면 기본 동작
   const handleClick = onClick || (() => router.push(defaultRoute));
