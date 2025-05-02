@@ -4,9 +4,8 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
 import { useChannelStore } from "../store/channelStore";
 import { useUserStore } from "../store/userStore";
-import { nanoid } from "nanoid";
-
-const userId = nanoid();
+// import { nanoid } from "nanoid";
+import { getLocalStorage, setLocalStorage } from "@/utils/storage";
 
 export default function SetupUserChannel() {
   //채널 생성과 구독 설정하는 컴포넌트
@@ -16,6 +15,12 @@ export default function SetupUserChannel() {
   const { setUsers } = useUserStore();
 
   useEffect(() => {
+    let userId = getLocalStorage("userId");
+
+    if (!userId) {
+      userId = crypto.randomUUID();
+      setLocalStorage("userId", userId);
+    }
     const tableChannel = supabase.channel("user", {
       config: {
         presence: {
