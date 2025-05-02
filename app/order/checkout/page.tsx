@@ -21,14 +21,14 @@ const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 // const customerKey = generateRandomString();
 
 export default function WidgetCheckoutPage() {
-  const { getTotalPrice, cartItems } = useCartStore();
+  const { getTotalPrice } = useCartStore();
   const totalPrice = getTotalPrice();
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
   const supabase = createClient();
-  
+
   useEffect(() => {
     async function fetchPaymentWidgets() {
       try {
@@ -103,7 +103,7 @@ export default function WidgetCheckoutPage() {
     }
 
     renderPaymentWidgets();
-  }, [widgets, totalPrice]);
+  }, [widgets, totalPrice, supabase]);
 
   return (
     <div className="wrapper">

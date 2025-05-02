@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useCartStore } from "../store/store";
 import { useRouter } from "next/navigation";
 import FixedBottomCTA from "./FixedBottomCTA";
 import { useToastStore } from "../store/toastStore";
@@ -28,7 +27,7 @@ const MAX_SHAKE_DURATION = 0.4;
 export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
   const [amount, setAmount] = useState(1);
   const discountedPrice = null;
-  const { addToCart } = useCartStore();
+  // const { addToCart } = useCartStore();
   const router = useRouter();
   const addToast = useToastStore((state) => state.addToast);
   const menuPrice = `${(amount * menu.price).toLocaleString()}`;
@@ -56,7 +55,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
 
   const supabase = createClient();
 
-  const { cartItems, updateQuantity } = useCartStore();
+  // const { cartItems, updateQuantity } = useCartStore();
 
   const handleAddToCart = async (
     itemId: number,
@@ -323,6 +322,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
       clearTimeout(holdTimeout);
       clearInterval(holdTimeout as unknown as NodeJS.Timeout);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   }, [isHoldingRight, isHoldingLeft]);
 
   useEffect(() => {

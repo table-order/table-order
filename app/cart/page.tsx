@@ -20,7 +20,7 @@ type Cart = {
 };
 
 export default function CartPage() {
-  const { cartItems, removeFromCart, updateQuantity } = useCartStore();
+  const { updateQuantity } = useCartStore();
   const [dbCartItems, setDbCartItems] = useState<Cart[]>([]);
   const [myCartItems, setMyCartItems] = useState<Cart[]>([]); // 내 주문
   const [memberCartItems, setMemberCartItems] = useState<Cart[]>([]); // 멤버 주문
