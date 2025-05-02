@@ -2,6 +2,7 @@ import FixedBottomCTA from "./components/FixedBottomCTA";
 import MainFooter from "./components/MainFooter";
 import MenuList from "./components/MenuList";
 import NavBar from "./components/NavBar";
+import UserCount from "./components/UserCount";
 
 export default function Home() {
   return (
@@ -12,10 +13,7 @@ export default function Home() {
             <span className="text-22 text-tossgray-900 font-bold">
               포스트버거(Post Burger)
             </span>
-            <span className="text-17 text-tossgray-800 font-medium">
-              멤버도 QR 찍고{" "}
-              <span className="text-tossblue-500">함께 주문</span>해요
-            </span>
+            <UserCount />
           </div>
           <p className="text-13 text-tossgray-600">기본홀 3번</p>
         </div>
