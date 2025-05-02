@@ -7,6 +7,7 @@ import {
 } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/app/store/store";
+import { createClient } from "@/utils/supabase/client";
 
 function generateRandomString() {
   return window.btoa(Math.random().toString()).slice(0, 20);
@@ -26,6 +27,8 @@ export default function WidgetCheckoutPage() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
+  const supabase = createClient();
+  
   useEffect(() => {
     async function fetchPaymentWidgets() {
       try {
@@ -53,6 +56,21 @@ export default function WidgetCheckoutPage() {
       if (widgets == null) {
         return;
       }
+
+      const { data: cartItems, error } = await supabase
+        .from("Cart") // 'cart' 테이블에서 데이터 조회
+        .select("*"); // 모든 컬럼 선택
+
+      if (error) {
+        console.error("Error fetching cart items:", error);
+        return;
+      }
+
+      // 총 금액 계산
+      const totalPrice = cartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
 
       // ------  주문서의 결제 금액 설정 ------
       // TODO: 위젯의 결제금액을 결제하려는 금액으로 초기화하세요.
@@ -104,10 +122,24 @@ export default function WidgetCheckoutPage() {
           // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
           onClick={async () => {
             try {
+              const { data: cartItems, error } = await supabase
+                .from("Cart")
+                .select("*");
+
+              if (error) {
+                console.error("Error fetching cart items:", error);
+                return;
+              }
+
+              // orderName 생성
               const orderName =
                 cartItems.length > 1
                   ? `${cartItems[0].name} 외 ${cartItems.length - 1}건`
                   : cartItems[0].name;
+              // const orderName =
+              //   cartItems.length > 1
+              //     ? `${cartItems[0].name} 외 ${cartItems.length - 1}건`
+              //     : cartItems[0].name;
               // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
               await widgets?.requestPayment({

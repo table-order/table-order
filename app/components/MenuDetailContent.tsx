@@ -5,6 +5,8 @@ import { useCartStore } from "../store/store";
 import { useRouter } from "next/navigation";
 import FixedBottomCTA from "./FixedBottomCTA";
 import { useToastStore } from "../store/toastStore";
+import { createClient } from "@/utils/supabase/client";
+import { getLocalStorage } from "@/utils/storage";
 
 type MenuDetailContentProps = {
   menu: {
@@ -52,16 +54,134 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
 
   const shakingDivRef = useRef<HTMLDivElement>(null);
 
-  const handleAddToCart = () => {
-    addToCart({
-      id: menu.id,
-      name: menu.name,
-      price: menu.price,
-      quantity: amount,
-    });
+  const supabase = createClient();
+
+  const { cartItems, updateQuantity } = useCartStore();
+
+  const handleAddToCart = async (
+    itemId: number,
+    name: string,
+    price: number
+  ) => {
+    const userId = getLocalStorage("userId");
+    // 1. Cart 테이블이 비어있는지 확인
+    const { data: cartItems, error: fetchCartError } = await supabase
+      .from("Cart")
+      .select("*");
+
+    if (fetchCartError) {
+      console.error("Error fetching cart items:", fetchCartError);
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      // 2. Cart 테이블이 비어있으면 INSERT
+      try {
+        const { error: insertError } = await supabase.from("Cart").insert({
+          itemId: itemId,
+          name: name,
+          price: price,
+          quantity: amount,
+          userId: userId,
+        });
+
+        if (insertError) {
+          console.error("Error inserting cart item:", insertError);
+          return;
+        }
+      } catch (error) {
+        console.error("Error inserting cart item:", error);
+        return;
+      }
+    } else {
+      // 3. Cart 테이블이 비어있지 않으면 기존 항목 조회
+      const { data: existingItem, error: fetchItemError } = await supabase
+        .from("Cart")
+        .select("*")
+        .eq("itemId", itemId)
+        .eq("userId", userId)
+        .single();
+
+      if (fetchItemError && fetchItemError.code !== "PGRST116") {
+        // PGRST116은 "No rows found" 오류 코드입니다.
+        console.error("Error fetching cart item:", fetchItemError);
+        return;
+      }
+
+      if (existingItem) {
+        // 4. 기존 항목이 있으면 UPDATE
+        try {
+          const { error: updateError } = await supabase
+            .from("Cart")
+            .update({ quantity: existingItem.quantity + amount })
+            .eq("itemId", itemId)
+            .eq("userId", userId);
+
+          if (updateError) {
+            console.error("Error updating cart item:", updateError);
+            return;
+          }
+        } catch (error) {
+          console.error("Error updating cart item:", error);
+          return;
+        }
+      } else {
+        // 5. 기존 항목이 없으면 INSERT
+        try {
+          const { error: insertError } = await supabase.from("Cart").insert({
+            itemId: itemId,
+            name: name,
+            price: price,
+            quantity: amount,
+            userId: userId,
+          });
+
+          if (insertError) {
+            console.error("Error inserting cart item:", insertError);
+            return;
+          }
+        } catch (error) {
+          console.error("Error inserting cart item:", error);
+          return;
+        }
+      }
+    }
+
+    // 6. Zustand 스토어 업데이트
+    // const existingCartItem = cartItems.find((item) => item.id === itemId);
+    // if (existingCartItem) {
+    //   updateQuantity(itemId, existingCartItem.quantity + amount);
+    // } else {
+    //   addToCart({ id: itemId, name, price, quantity: amount });
+    // }
+
+    // 7. 성공 메시지 및 페이지 이동
+    addToast("장바구니에 추가했어요", "success");
     router.push("/");
-    addToast("장바구니에 메뉴를 추가했어요", "success");
   };
+  // const handleAddToCart = async () => {
+  //   addToCart({
+  //     id: menu.id,
+  //     name: menu.name,
+  //     price: menu.price,
+  //     quantity: amount,
+  //   });
+  //   const { error } = await supabase.from("Cart").insert({
+  //     name: menu.name,
+  //     price: menu.price,
+  //     quantity: amount,
+  //     itemId: menu.id,
+  //     // userId: userId, // 현재 사용자 ID
+  //   });
+
+  //   if (error) {
+  //     console.error("Error adding to cart:", error);
+  //     addToast("장바구니 추가 실패", "error"); // 토스트 메시지
+  //     return; // 에러 처리
+  //   }
+  //   router.push("/");
+  //   addToast("장바구니에 메뉴를 추가했어요", "success");
+  // };
 
   const startShaking = (speed: string) => {
     if (shakingDivRef.current) {
@@ -203,7 +323,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
       clearTimeout(holdTimeout);
       clearInterval(holdTimeout as unknown as NodeJS.Timeout);
     }
-  }, [isHoldingRight, isHoldingLeft, holdTimeout]);
+  }, [isHoldingRight, isHoldingLeft]);
 
   useEffect(() => {
     return () => {
@@ -407,9 +527,10 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
           </div>
         </div>
         <FixedBottomCTA
-          onClick={handleAddToCart}
+          onClick={() => handleAddToCart(menu.id, menu.name, menu.price)}
           amount={amount}
-          menuPrice={menuPrice}
+          menuPrice={menu.price * amount}
+          menuId={menu.id}
         />
       </div>
     </div>
