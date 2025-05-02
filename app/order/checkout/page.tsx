@@ -27,6 +27,8 @@ export default function WidgetCheckoutPage() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
+  const supabase = createClient();
+  
   useEffect(() => {
     async function fetchPaymentWidgets() {
       try {
@@ -55,7 +57,6 @@ export default function WidgetCheckoutPage() {
         return;
       }
 
-      const supabase = createClient();
       const { data: cartItems, error } = await supabase
         .from("Cart") // 'cart' 테이블에서 데이터 조회
         .select("*"); // 모든 컬럼 선택
@@ -121,7 +122,6 @@ export default function WidgetCheckoutPage() {
           // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
           onClick={async () => {
             try {
-              const supabase = createClient();
               const { data: cartItems, error } = await supabase
                 .from("Cart")
                 .select("*");
