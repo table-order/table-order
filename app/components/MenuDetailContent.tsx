@@ -77,10 +77,10 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
       // 2. Cart 테이블이 비어있으면 INSERT
       try {
         const { error: insertError } = await supabase.from("Cart").insert({
-          itemId: itemId,
           name: name,
           price: price,
           quantity: amount,
+          itemId: itemId,
           userId: userId,
         });
 
@@ -99,7 +99,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
         .select("*")
         .eq("itemId", itemId)
         .eq("userId", userId)
-        .single();
+        .maybeSingle();
 
       if (fetchItemError && fetchItemError.code !== "PGRST116") {
         // PGRST116은 "No rows found" 오류 코드입니다.
