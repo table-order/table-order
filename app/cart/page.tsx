@@ -83,20 +83,18 @@ export default function CartPage() {
     updateQuantity(itemId, newQuantity);
   };
 
-  const handleDeleteFromCart = async (itemId: number) => {
+  const handleDeleteFromCart = async (id: number) => {
     const { error: dbError } = await supabase
       .from("Cart")
       .delete()
-      .eq("itemId", itemId);
+      .eq("id", id);
 
     if (dbError) {
       console.error("Error deleting from cart:", dbError);
       addToast("장바구니 삭제 실패", "error");
       return;
     }
-    setDbCartItems((prevItems) =>
-      prevItems.filter((item) => item.itemId !== itemId)
-    );
+    setDbCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
 
     addToast("메뉴를 삭제했어요", "success");
   };
@@ -120,7 +118,7 @@ export default function CartPage() {
                         strokeWidth={1.5}
                         stroke="white"
                         onClick={() => {
-                          handleDeleteFromCart(item.itemId);
+                          handleDeleteFromCart(item.id);
                           // removeFromCart(item.id);
                         }}
                         className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
@@ -241,7 +239,7 @@ export default function CartPage() {
                           strokeWidth={1.5}
                           stroke="white"
                           onClick={() => {
-                            handleDeleteFromCart(item.itemId);
+                            handleDeleteFromCart(item.id);
                           }}
                           className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
                         >
