@@ -97,6 +97,8 @@ export default function CartPage() {
     setDbCartItems((prevItems) =>
       prevItems.filter((item) => item.itemId !== itemId)
     );
+
+    addToast("메뉴를 삭제했어요", "success");
   };
 
   return (
@@ -120,7 +122,6 @@ export default function CartPage() {
                         onClick={() => {
                           handleDeleteFromCart(item.itemId);
                           // removeFromCart(item.id);
-                          addToast("메뉴를 삭제했어요", "success");
                         }}
                         className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
                       >
@@ -241,7 +242,6 @@ export default function CartPage() {
                           stroke="white"
                           onClick={() => {
                             handleDeleteFromCart(item.itemId);
-                            addToast("메뉴를 삭제했어요", "success");
                           }}
                           className="size-10 fill-tossgray-300 hover:fill-gray-500 active:fill-gray-500"
                         >
