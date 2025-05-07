@@ -20,7 +20,7 @@ type Cart = {
 };
 
 export default function CartPage() {
-  const { updateQuantity, removeFromCart } = useCartStore();
+  // const { updateQuantity, removeFromCart } = useCartStore();
   const [dbCartItems, setDbCartItems] = useState<Cart[]>([]);
   const [myCartItems, setMyCartItems] = useState<Cart[]>([]); // 내 주문
   const [memberCartItems, setMemberCartItems] = useState<Cart[]>([]); // 멤버 주문
@@ -47,41 +47,36 @@ export default function CartPage() {
     };
 
     fetchData();
+  }, [supabase]);
 
-    // const cartChanges = supabase
-    //   .channel("cart_changes2")
-    //   .on(
-    //     "postgres_changes",
-    //     {
-    //       event: "*",
-    //       schema: "public",
-    //       table: "Cart",
-    //     },
-    //     (payload) => {
-    //       console.log("Cart table change:", payload);
-    //       fetchData(); // Re-fetch cart data on changes
-    //     }
-    //   )
-    //   .subscribe();
-
-    // return () => {
-    //   cartChanges.unsubscribe();
-    // };
-  }, [supabase, dbCartItems, myCartItems, memberCartItems]);
-
-  const handleUpdateQuantity = async (itemId: number, newQuantity: number) => {
+  const handleUpdateQuantity = async (id: number, newQuantity: number) => {
     const { error: dbError } = await supabase
       .from("Cart")
       .update({ quantity: newQuantity })
-      .eq("itemId", itemId);
+      .eq("id", id);
 
     if (dbError) {
       console.error("Error updating quantity:", dbError);
       addToast("수량 변경 실패", "error");
       return;
     }
-    updateQuantity(itemId, newQuantity);
+    setDbCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+    // updateQuantity(id, newQuantity);
   };
+  useEffect(() => {
+    const userId = getLocalStorage("userId");
+
+    // dbCartItems가 변경될 때 myCartItems와 memberCartItems 업데이트
+    const myItems = dbCartItems.filter((item) => item.userId === userId);
+    const memberItems = dbCartItems.filter((item) => item.userId !== userId);
+
+    setMyCartItems(myItems);
+    setMemberCartItems(memberItems);
+  }, [dbCartItems]); // dbCartItems가 변경될 때만 실행
 
   const handleDeleteFromCart = async (id: number) => {
     const userId = getLocalStorage("userId");
@@ -102,7 +97,7 @@ export default function CartPage() {
       return;
     }
     setDbCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    removeFromCart(id);
+    // removeFromCart(id);
     //addToast("메뉴를 삭제했어요", "success");
   };
 
@@ -156,14 +151,9 @@ export default function CartPage() {
                       <div id="count-minus" className="flex items-center p-3">
                         <button
                           type="button"
-                          // onClick={() => {
-                          //   updateQuantity(item.id, item.quantity - 1);
-                          // }}
+                          disabled={item.quantity <= 1}
                           onClick={() => {
-                            handleUpdateQuantity(
-                              item.itemId,
-                              item.quantity - 1
-                            );
+                            handleUpdateQuantity(item.id, item.quantity - 1);
                           }}
                         >
                           <svg
@@ -195,14 +185,8 @@ export default function CartPage() {
                       <div id="count-plus" className="flex items-center p-3">
                         <button
                           type="button"
-                          // onClick={() => {
-                          //   updateQuantity(item.id, item.quantity + 1);
-                          // }}
                           onClick={() => {
-                            handleUpdateQuantity(
-                              item.itemId,
-                              item.quantity + 1
-                            );
+                            handleUpdateQuantity(item.id, item.quantity + 1);
                           }}
                         >
                           <svg
@@ -276,14 +260,21 @@ export default function CartPage() {
                         <div id="count-minus" className="flex items-center p-3">
                           <button
                             type="button"
-                            disabled // 멤버 주문은 수량 변경 불가
+                            disabled={item.quantity <= 1}
+                            onClick={() => {
+                              handleUpdateQuantity(item.id, item.quantity - 1);
+                            }}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
                               strokeWidth="2.5"
-                              className="size-5 stroke-gray-300" // 비활성화 상태
+                              className={`size-5 ${
+                                item.quantity <= 1
+                                  ? "stroke-gray-300"
+                                  : "stroke-gray-500"
+                              }`}
                             >
                               <path
                                 strokeLinecap="round"
@@ -303,14 +294,16 @@ export default function CartPage() {
                         <div id="count-plus" className="flex items-center p-3">
                           <button
                             type="button"
-                            disabled // 멤버 주문은 수량 변경 불가
+                            onClick={() => {
+                              handleUpdateQuantity(item.id, item.quantity + 1);
+                            }}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
                               strokeWidth="2.5"
-                              className="size-5 stroke-gray-300" // 비활성화 상태
+                              className="size-5 stroke-gray-500"
                             >
                               <path
                                 strokeLinecap="round"
