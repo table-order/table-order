@@ -20,7 +20,7 @@ type Cart = {
 };
 
 export default function CartPage() {
-  const { updateQuantity } = useCartStore();
+  const { updateQuantity, removeFromCart } = useCartStore();
   const [dbCartItems, setDbCartItems] = useState<Cart[]>([]);
   const [myCartItems, setMyCartItems] = useState<Cart[]>([]); // 내 주문
   const [memberCartItems, setMemberCartItems] = useState<Cart[]>([]); // 멤버 주문
@@ -48,26 +48,26 @@ export default function CartPage() {
 
     fetchData();
 
-    const cartChanges = supabase
-      .channel("cart_changes2")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "Cart",
-        },
-        (payload) => {
-          console.log("Cart table change:", payload);
-          fetchData(); // Re-fetch cart data on changes
-        }
-      )
-      .subscribe();
+    // const cartChanges = supabase
+    //   .channel("cart_changes2")
+    //   .on(
+    //     "postgres_changes",
+    //     {
+    //       event: "*",
+    //       schema: "public",
+    //       table: "Cart",
+    //     },
+    //     (payload) => {
+    //       console.log("Cart table change:", payload);
+    //       fetchData(); // Re-fetch cart data on changes
+    //     }
+    //   )
+    //   .subscribe();
 
-    return () => {
-      cartChanges.unsubscribe();
-    };
-  }, [supabase]);
+    // return () => {
+    //   cartChanges.unsubscribe();
+    // };
+  }, [supabase, dbCartItems, myCartItems, memberCartItems]);
 
   const handleUpdateQuantity = async (itemId: number, newQuantity: number) => {
     const { error: dbError } = await supabase
@@ -84,19 +84,26 @@ export default function CartPage() {
   };
 
   const handleDeleteFromCart = async (id: number) => {
+    const userId = getLocalStorage("userId");
+
+    const { error: dbError1 } = await supabase
+      .from("Cart")
+      .update({ clickedUserId: userId })
+      .eq("id", id);
+
     const { error: dbError } = await supabase
       .from("Cart")
       .delete()
       .eq("id", id);
 
-    if (dbError) {
+    if (dbError || dbError1) {
       console.error("Error deleting from cart:", dbError);
       addToast("장바구니 삭제 실패", "error");
       return;
     }
     setDbCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-
-    addToast("메뉴를 삭제했어요", "success");
+    removeFromCart(id);
+    //addToast("메뉴를 삭제했어요", "success");
   };
 
   return (
