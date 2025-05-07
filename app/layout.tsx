@@ -4,6 +4,7 @@ import "./globals.css";
 import MainHeader from "./components/MainHeader";
 import ToastPortal from "./components/ToastPortal";
 import SetupUserChannel from "./components/SetupUserChannel";
+import SetupCartChannel from "./components/SetupCartChannel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SetupUserChannel />
+        <SetupCartChannel />
         <header>
           <MainHeader />
         </header>
