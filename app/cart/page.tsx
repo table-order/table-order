@@ -6,7 +6,7 @@ import CustomButton from "../components/CustomButton";
 import { useRouter } from "next/navigation";
 import { useToastStore } from "../store/toastStore";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getLocalStorage } from "@/utils/storage";
 
 type Cart = {
@@ -27,12 +27,17 @@ export default function CartPage() {
   const addToast = useToastStore((state) => state.addToast);
   const router = useRouter();
 
+  const prevDbCartItemsRef = useRef<Cart[]>([]);
+  const isUpdatingQuantityRef = useRef(false);
+
   const supabase = createClient();
 
   useEffect(() => {
     const userId = getLocalStorage("userId");
+
+    // 초기 데이터 가져오기
     const fetchData = async () => {
-      const { data, error } = await supabase.from("Cart").select("*"); // Use Cart type
+      const { data, error } = await supabase.from("Cart").select("*");
       if (error) {
         console.error("Error fetching initial cart data", error);
       }
@@ -47,9 +52,67 @@ export default function CartPage() {
     };
 
     fetchData();
+
+    const channel = supabase
+      .channel("cart-updates")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "Cart" },
+        (payload) => {
+          // 변경 사항이 발생하면 dbCartItems 업데이트
+          if (payload.eventType === "INSERT") {
+            const newItem = payload.new as Cart;
+            setDbCartItems((prevItems) => [...prevItems, newItem]);
+          } else if (payload.eventType === "UPDATE") {
+            const updatedItem = payload.new as Cart;
+            setDbCartItems((prevItems) =>
+              prevItems.map((item) =>
+                item.id === updatedItem.id ? updatedItem : item
+              )
+            );
+          } else if (payload.eventType === "DELETE") {
+            const deletedItem = payload.old as Cart;
+            setDbCartItems((prevItems) =>
+              prevItems.filter((item) => item.id !== deletedItem.id)
+            );
+          }
+        }
+      )
+      .subscribe();
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [supabase]);
 
+  useEffect(() => {
+    const prevItems = prevDbCartItemsRef.current;
+    const currentItems = dbCartItems;
+
+    // 수량 변경 중이면 토스트를 표시하지 않음
+    if (isUpdatingQuantityRef.current) {
+      isUpdatingQuantityRef.current = false; // 수량 변경 완료
+      prevDbCartItemsRef.current = currentItems; // 이전 상태 업데이트
+      return;
+    }
+
+    // 수량이 변경된 항목 찾기
+    const updatedItems = currentItems.filter((item) => {
+      const prevItem = prevItems.find((prevItem) => prevItem.id === item.id);
+      return prevItem && prevItem.quantity !== item.quantity;
+    });
+    if (updatedItems.length > 0) {
+      updatedItems.forEach((item) => {
+        addToast(`멤버가 ${item.name}메뉴를 추가했어요`, "success");
+      });
+    }
+
+    // 현재 상태를 이전 상태로 업데이트
+    prevDbCartItemsRef.current = currentItems;
+  }, [dbCartItems, addToast]);
+
   const handleUpdateQuantity = async (id: number, newQuantity: number) => {
+    isUpdatingQuantityRef.current = true;
     const { error: dbError } = await supabase
       .from("Cart")
       .update({ quantity: newQuantity })
@@ -58,6 +121,7 @@ export default function CartPage() {
     if (dbError) {
       console.error("Error updating quantity:", dbError);
       addToast("수량 변경 실패", "error");
+      isUpdatingQuantityRef.current = false;
       return;
     }
     setDbCartItems((prevItems) =>

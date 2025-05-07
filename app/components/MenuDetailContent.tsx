@@ -120,6 +120,8 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
             console.error("Error updating cart item:", updateError);
             return;
           }
+
+          addToast("ch: 메뉴를 추가했어요");
         } catch (error) {
           console.error("Error updating cart item:", error);
           return;
