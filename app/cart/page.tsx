@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useCartStore } from "../store/store";
+// import { useCartStore } from "../store/store";
 import FixedBottomCTA from "../components/FixedBottomCTA";
 import CustomButton from "../components/CustomButton";
 import { useRouter } from "next/navigation";
@@ -42,6 +42,7 @@ export default function CartPage() {
         console.error("Error fetching initial cart data", error);
       }
       setDbCartItems(data || []);
+      prevDbCartItemsRef.current = data || [];
 
       // 내 주문과 멤버 주문 구분
       const myItems = data?.filter((item) => item.userId === userId) || [];
