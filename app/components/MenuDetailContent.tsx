@@ -155,7 +155,7 @@ export default function MenuDetailContent({ menu }: MenuDetailContentProps) {
     // }
 
     // 7. 성공 메시지 및 페이지 이동
-    addToast("장바구니에 추가했어요", "success");
+    //addToast("장바구니에 추가했어요", "success");
     router.push("/");
   };
   // const handleAddToCart = async () => {
