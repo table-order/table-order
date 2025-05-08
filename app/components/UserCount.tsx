@@ -7,7 +7,8 @@ export default function UserCount() {
 
   return users.length > 1 ? (
     <span className="text-17 text-tossgray-800 font-medium">
-      {users.length}명 함께 주문중
+      멤버 {users.length}명과{" "}
+      <span className="text-tossblue-500">함께 주문중</span>
     </span>
   ) : (
     <span className="text-17 text-tossgray-800 font-medium">
