@@ -37,6 +37,11 @@ export default function SetupCartChannel() {
               console.log("ch: 추가된 장바구니 아이템:", payload.new);
               break;
             case "DELETE":
+              // 주문 완료로 인한 삭제인 경우
+              if (payload.old.isOrderComplete) {
+                addToast("주문이 완료되었어요!");
+                return;
+              }
               if (myId !== payload.old.clickedUserId) {
                 addToast(`ch: 멤버가 ${payload.old.name}메뉴를 삭제했어요`);
               } else {

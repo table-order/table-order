@@ -1,19 +1,27 @@
-"use client";
-
 import OrderHistory from "@/app/components/OrderHistory";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HistoryPage() {
   return (
     <>
       <article className="p-6 mb-[112px]">
-        <div className="flex flex-col">
-          <span className="text-[28px] font-bold text-tossgray-900">
-            주문 내역
-          </span>
-          <span className="text-15 font-normal text-[#f04452]">
-            나갈 때 직접 결제, 잊지 마세요.
-          </span>
+        <div className="flex justify-between">
+          <div className="flex flex-col">
+            <span className="text-[28px] font-bold text-tossgray-900">
+              주문 내역
+            </span>
+            <span className="text-15 font-normal text-[#f04452]">
+              나갈 때 직접 결제, 잊지 마세요.
+            </span>
+          </div>
+          <Image
+            alt="clap"
+            width={60}
+            height={60}
+            src="https://static.toss.im/3d-emojis/u1F44F-apng.png"
+            aria-hidden="true"
+          />
         </div>
         <OrderHistory />
       </article>
