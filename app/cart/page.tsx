@@ -1,6 +1,6 @@
 "use client";
+
 import Link from "next/link";
-// import { useCartStore } from "../store/store";
 import FixedBottomCTA from "../components/FixedBottomCTA";
 import CustomButton from "../components/CustomButton";
 import { useRouter } from "next/navigation";
@@ -17,10 +17,10 @@ type Cart = {
   quantity: number;
   itemId: number;
   userId: string;
+  updatedBy?: string;
 };
 
 export default function CartPage() {
-  // const { updateQuantity, removeFromCart } = useCartStore();
   const [dbCartItems, setDbCartItems] = useState<Cart[]>([]);
   const [myCartItems, setMyCartItems] = useState<Cart[]>([]); // 내 주문
   const [memberCartItems, setMemberCartItems] = useState<Cart[]>([]); // 멤버 주문
@@ -28,7 +28,6 @@ export default function CartPage() {
   const router = useRouter();
 
   const prevDbCartItemsRef = useRef<Cart[]>([]);
-  const isUpdatingQuantityRef = useRef(false);
 
   const supabase = createClient();
 
@@ -86,52 +85,60 @@ export default function CartPage() {
     };
   }, [supabase]);
 
-  useEffect(() => {
-    const prevItems = prevDbCartItemsRef.current;
-    const currentItems = dbCartItems;
+  const handleUpdateQuantity = async (id: number, newQuantity: number) => {
+    const userId = getLocalStorage("userId");
 
-    // 수량 변경 중이면 토스트를 표시하지 않음
-    if (isUpdatingQuantityRef.current) {
-      isUpdatingQuantityRef.current = false; // 수량 변경 완료
-      prevDbCartItemsRef.current = currentItems; // 이전 상태 업데이트
+    const { error: dbError } = await supabase
+      .from("Cart")
+      .update({
+        quantity: newQuantity,
+        updatedBy: userId,
+      })
+      .eq("id", id);
+
+    if (dbError) {
+      console.error("Error updating quantity:", dbError);
+      addToast("수량 변경 실패", "error");
       return;
     }
+  };
+
+  // useEffect 수정 (dbCartItems를 감시하는 부분)
+  useEffect(() => {
+    // const userId = getLocalStorage("userId");
+    const prevItems = prevDbCartItemsRef.current;
+    const currentItems = dbCartItems;
 
     // 수량이 변경된 항목 찾기
     const updatedItems = currentItems.filter((item) => {
       const prevItem = prevItems.find((prevItem) => prevItem.id === item.id);
-      return prevItem && prevItem.quantity !== item.quantity;
+      // 수량이 변경되었고, updatedBy가 없는 경우만 필터링 (버튼으로 수정한 경우는 제외)
+      return prevItem && prevItem.quantity !== item.quantity && !item.updatedBy;
     });
+
     if (updatedItems.length > 0) {
       updatedItems.forEach((item) => {
         addToast(`멤버가 ${item.name}메뉴를 추가했어요`, "success");
       });
     }
 
+    // updatedBy 필드 초기화
+    const resetUpdatedBy = async () => {
+      for (const item of currentItems) {
+        if (item.updatedBy) {
+          await supabase
+            .from("Cart")
+            .update({ updatedBy: null })
+            .eq("id", item.id);
+        }
+      }
+    };
+    resetUpdatedBy();
+
     // 현재 상태를 이전 상태로 업데이트
     prevDbCartItemsRef.current = currentItems;
   }, [dbCartItems, addToast]);
 
-  const handleUpdateQuantity = async (id: number, newQuantity: number) => {
-    isUpdatingQuantityRef.current = true;
-    const { error: dbError } = await supabase
-      .from("Cart")
-      .update({ quantity: newQuantity })
-      .eq("id", id);
-
-    if (dbError) {
-      console.error("Error updating quantity:", dbError);
-      addToast("수량 변경 실패", "error");
-      isUpdatingQuantityRef.current = false;
-      return;
-    }
-    setDbCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-    // updateQuantity(id, newQuantity);
-  };
   useEffect(() => {
     const userId = getLocalStorage("userId");
 

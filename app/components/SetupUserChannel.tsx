@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
 import { useChannelStore } from "../store/channelStore";
 import { useUserStore } from "../store/userStore";
-// import { nanoid } from "nanoid";
+import { nanoid } from "nanoid";
 import { getLocalStorage, setLocalStorage } from "@/utils/storage";
 
 export default function SetupUserChannel() {
@@ -18,7 +18,7 @@ export default function SetupUserChannel() {
     let userId = getLocalStorage("userId");
 
     if (!userId) {
-      userId = crypto.randomUUID();
+      userId = nanoid();
       setLocalStorage("userId", userId);
     }
     const tableChannel = supabase.channel("user", {
