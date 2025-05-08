@@ -41,12 +41,7 @@ export default function SetupUserChannel() {
 
         console.log("현재 접속중인 유저", newState); //접속자 리스트 갱신
       })
-      .on("presence", { event: "join" }, ({ key, newPresences }) => {
-        console.log(`${key}입장`, key, newPresences);
-      })
-      .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
-        console.log(`${key}퇴장`, key, leftPresences);
-      })
+
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
           tableChannel.track({});
