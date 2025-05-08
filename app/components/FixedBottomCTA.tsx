@@ -122,19 +122,19 @@ export default function FixedBottomCTA({
           fetchData();
           switch (payload.eventType) {
             case "INSERT":
-              console.log("추가된 장바구니 아이템:", payload.new);
-              addToast(
-                `멤버가 ${payload.new.name}메뉴를 추가했어요.`,
-                "success"
-              );
+              // console.log("추가된 장바구니 아이템:", payload.new);
+              // addToast(
+              //   `멤버가 ${payload.new.name}메뉴를 추가했어요.`,
+              //   "success"
+              // );
               break;
 
             case "DELETE":
-              console.log("삭제된 장바구니 아이템 전체 정보:", payload.old);
-              addToast(
-                `멤버가 ${payload.old.name}메뉴를 삭제했어요.`,
-                "success"
-              );
+              // console.log("삭제된 장바구니 아이템 전체 정보:", payload.old);
+              // addToast(
+              //   `멤버가 ${payload.old.name}메뉴를 삭제했어요.`,
+              //   "success"
+              // );
               break;
           }
         }

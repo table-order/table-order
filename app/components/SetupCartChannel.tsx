@@ -34,7 +34,7 @@ export default function SetupCartChannel() {
               } else {
                 addToast("ch: 메뉴를 추가했어요");
               }
-              console.log("ch: 추가된 장바구니 아이템:", payload.new);
+              // console.log("ch: 추가된 장바구니 아이템:", payload.new);
               break;
             case "DELETE":
               // 주문 완료로 인한 삭제인 경우
@@ -49,7 +49,7 @@ export default function SetupCartChannel() {
               }
               //addToast(`멤버가 ${payload.old.name}메뉴를 삭제했어요`);
 
-              console.log("ch: 삭제된 장바구니 아이템 전체 정보:", payload.old);
+              // console.log("ch: 삭제된 장바구니 아이템 전체 정보:", payload.old);
               break;
           }
         }
