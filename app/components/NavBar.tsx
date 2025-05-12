@@ -70,6 +70,7 @@ export default function NavBar() {
             <NavItem key={item.label} label={item.label} href={item.href} />
           ))}
           <button
+            aria-label="카테고리 선택하기"
             onClick={onHandleModalStatus}
             className={`absolute ${
               isFixed ? "right-6" : "right-6"
