@@ -74,9 +74,10 @@ export default function CallButton() {
       >
         <Image
           src="https://static.toss.im/2d-emojis/svg/u1F6CE.svg"
-          alt="직원호출"
+          alt=""
           width={24}
           height={24}
+          aria-hidden="true"
         />
         <span>직원호출</span>
       </button>
